@@ -11,6 +11,7 @@ public class Driver {
 
     static Scanner sc;
     static UserService us;
+    //static StoreItems si; //will be used to test users being able to see items
     public static void main(String[] args){
 
         sc = new Scanner(System.in);
