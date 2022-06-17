@@ -6,4 +6,5 @@ public interface UserDAOS {
 
     void insertUser(User u);
     User getById(int id);
+    User getUser(User u);
 }

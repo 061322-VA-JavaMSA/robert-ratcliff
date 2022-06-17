@@ -19,4 +19,22 @@ public class UserArrayList implements UserDAOS{
     public User getById(int id) {
         return userDB.get(id);
     }
+
+    public User getUser(User u) {
+        User verifiedUser = new User();
+        String verifiedUsername;
+        String verifiedPasswd;
+
+        for(int i = 0; i < userDB.size(); i++){
+            verifiedUser = userDB.get(i);
+            verifiedUsername = verifiedUser.getUsername();
+            verifiedPasswd = verifiedUser.getPassword();
+
+            if((u.getUsername() == verifiedUsername)
+            && (u.getPassword() == verifiedPasswd)){
+                return u;
+            }
+        }
+        return null;
+    }
 }
