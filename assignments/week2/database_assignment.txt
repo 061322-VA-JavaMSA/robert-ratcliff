@@ -1,0 +1,25 @@
+create table Customer(
+id serial primary key,
+first_name text,
+last_name text);
+
+create table SalesOffice(
+id serial primary key,
+street text,
+state text,
+zip int);
+
+create table Employee(
+id Serial primary key,
+first_name text,
+last_name text,
+age int,
+DoB date,
+sales_office_id  int references SalesOffice(id)
+);
+
+
+create table EmployeeToCustomer(
+employee_id int references Customer(id),
+customer_id int references Employee(id)
+);
