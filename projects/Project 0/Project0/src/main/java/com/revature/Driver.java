@@ -1,7 +1,7 @@
 package com.revature;
 
-import com.revature.daos.UserArrayList;
 import com.revature.models.User;
+import com.revature.services.AuthService;
 import com.revature.services.UserService;
 
 import java.util.ArrayList;
@@ -10,11 +10,13 @@ import java.util.Scanner;
 public class Driver {
 
     static Scanner sc;
+    static  AuthService as;
     static UserService us;
     //static StoreItems si; //will be used to test users being able to see items
     public static void main(String[] args){
 
         sc = new Scanner(System.in);
+        as = new AuthService();
         us = new UserService();
 
         System.out.println("Welcome to the Store!");
@@ -40,7 +42,9 @@ public class Driver {
 
     //Keeping code for now as logic, but will reimplement
     public static void registerMenu(){
-        User newUser = new User();
+        String username = null;
+        String passwd = null;
+        User newUser = new User(); //TODO cleanup this code to better handle new user.
         System.out.println("Register:");
         System.out.println("Please enter your username:");
         newUser.setUsername(sc.nextLine());
