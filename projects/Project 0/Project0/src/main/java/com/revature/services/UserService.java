@@ -2,11 +2,12 @@ package com.revature.services;
 
 import com.revature.daos.UserArrayList;
 import com.revature.daos.UserDAOS;
+import com.revature.daos.UserPostgreSQL;
 import com.revature.models.User;
 
 public class UserService {
 
-    private UserDAOS ud = new UserArrayList();
+    private UserDAOS ud = new UserPostgreSQL();
 
     //change this from return User to void
     public User createUser(User u) {
