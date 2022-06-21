@@ -30,11 +30,21 @@ public class UserArrayList implements UserDAOS{
             verifiedUsername = verifiedUser.getUsername();
             verifiedPasswd = verifiedUser.getPassword();
 
-            if((u.getUsername() == verifiedUsername)
-            && (u.getPassword() == verifiedPasswd)){
+            if((u.getUsername().equals(verifiedUsername))
+            && (u.getPassword().equals(verifiedPasswd))){
                 return u;
             }
         }
+        return null;
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public User getByLogin(String username, String passwd) {
         return null;
     }
 }
