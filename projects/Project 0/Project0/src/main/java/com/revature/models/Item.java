@@ -4,11 +4,11 @@ import com.revature.daos.ItemDAOS;
 
 import java.util.Objects;
 
-public class Item implements ItemDAOS {
+public class Item {
     private int id;
     private String name;
     private String description;
-    private int price; //Will decide later on what data type.
+    private float price; //Will decide later on what data type.
 
     @Override
     public String toString() {
@@ -58,11 +58,11 @@ public class Item implements ItemDAOS {
         this.description = description;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -75,8 +75,23 @@ public class Item implements ItemDAOS {
     }
 
     private boolean available;
-    @Override
     public void changePrice(Item i) {
 
+    }
+
+    public void insertItem(Item i) {
+
+    }
+
+    public Item getById(int id) {
+        return null;
+    }
+
+    public Item getItem(Item i) {
+        return null;
+    }
+
+    public Item getByItemName(String itemName) {
+        return null;
     }
 }
