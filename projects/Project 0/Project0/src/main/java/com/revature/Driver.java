@@ -4,8 +4,6 @@ import com.revature.models.User;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
 
-import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Driver {
