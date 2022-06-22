@@ -11,10 +11,11 @@ public class UserPostgreSQL implements UserDAOS{
     @Override
     public void insertUser(User u) {
 
-        String sql = "insert into users (username, password) values (?,?) returning id;";
+        String sql = "insert into customer (username, password) values (?,?) returning id;";
         try(Connection c = ConnectionUtil.getConnectionFromFile()){
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setString(1, u.getUsername());
+            ps.setString(2, u.getPassword());
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
