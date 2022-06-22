@@ -56,7 +56,6 @@ public class Driver {
         System.out.println("Please enter your password:");
         newUser.setPassword(sc.nextLine());
         User createdUser = us.createUser(newUser);
-        System.out.println("User: " + createdUser.getUsername() + " has been created.");
     }
 
     public static void loginMenu(){
