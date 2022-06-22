@@ -82,8 +82,9 @@ public class Driver {
         System.out.println("Please enter your password:");
         unverifiedUser.setPassword(sc.nextLine());
         if(us.getUser(unverifiedUser) != null){
-            System.out.println("Welcome Back!");
+            System.out.println("Welcome Back, " +unverifiedUser.getUsername()+"!");
+        }else {
+            System.out.println("Sorry. We could not find a user with those credentials.");
         }
-        System.out.println("Sorry. We could not find a user with those credentials.");
     }
 }
