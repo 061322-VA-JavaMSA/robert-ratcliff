@@ -89,7 +89,7 @@ public class UserPostgreSQL implements UserDAOS{
 
     @Override
     public User getByLogin(String username, String passwd) throws NullPointerException {
-        String sql = "select * from customer where (username,password) values (?,?)";
+        String sql = "select * from customer where username = ? and password = ?; ";
         User u = null;
 
         try(Connection c = ConnectionUtil.getConnectionFromFile()){
