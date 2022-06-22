@@ -30,7 +30,7 @@ public class UserPostgreSQL implements UserDAOS{
 
     @Override
     public User getById(int id) {
-        String sql = "select * from users where id = ?;";
+        String sql = "select * from customer where id = ?;";
         User user = null;
 
         try(Connection c = ConnectionUtil.getConnectionFromFile()){
@@ -40,7 +40,7 @@ public class UserPostgreSQL implements UserDAOS{
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()) {
+            while(rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
@@ -56,12 +56,12 @@ public class UserPostgreSQL implements UserDAOS{
 
     @Override
     public User getUser(User u) {
-        return null;
+        return getByLogin(u.getUsername(), u.getPassword());//might change get by login to getUser
     }
 
     @Override
     public User getByUsername(String username) {
-        String sql = "select * from users where username  = ?;";
+        String sql = "select * from customer where username  = ?;";
         User u = null;
 
         try (Connection c = ConnectionUtil.getConnectionFromFile()){
@@ -89,7 +89,7 @@ public class UserPostgreSQL implements UserDAOS{
 
     @Override
     public User getByLogin(String username, String passwd) throws NullPointerException {
-        String sql = "select * from users where (username,password) values (?,?)";
+        String sql = "select * from customer where (username,password) values (?,?)";
         User u = null;
 
         try(Connection c = ConnectionUtil.getConnectionFromFile()){
@@ -98,7 +98,8 @@ public class UserPostgreSQL implements UserDAOS{
             ps.setString(2, passwd);
 
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()){
+                u = new User();
                 u.setUserId(rs.getInt("id"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
