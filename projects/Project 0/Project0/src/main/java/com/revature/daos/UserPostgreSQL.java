@@ -22,6 +22,7 @@ public class UserPostgreSQL implements UserDAOS{
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     u.insertUser(u);
+                    System.out.println("User: " + u.getUsername() + " has been created.");
                 }
 
             } catch (SQLException e) {
@@ -71,7 +72,7 @@ public class UserPostgreSQL implements UserDAOS{
         try (Connection c = ConnectionUtil.getConnectionFromFile()){
             PreparedStatement ps = c.prepareStatement(sql);
 
-            ps.setString(1, username); // this refers to the 1st "?" in the sql string, allows to inject data
+            ps.setString(1, username);
 
             ResultSet rs = ps.executeQuery();
 
