@@ -10,22 +10,25 @@ public class UserPostgreSQL implements UserDAOS{
 
     @Override
     public void insertUser(User u) {
+        if(getUser(u) != null){
+            System.out.println("Can't insert user, as this user already exists");
+        }else {
+            String sql = "insert into customer (username, password) values (?,?) returning id;";
+            try (Connection c = ConnectionUtil.getConnectionFromFile()) {
+                PreparedStatement ps = c.prepareStatement(sql);
+                ps.setString(1, u.getUsername());
+                ps.setString(2, u.getPassword());
 
-        String sql = "insert into customer (username, password) values (?,?) returning id;";
-        try(Connection c = ConnectionUtil.getConnectionFromFile()){
-            PreparedStatement ps = c.prepareStatement(sql);
-            ps.setString(1, u.getUsername());
-            ps.setString(2, u.getPassword());
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    u.insertUser(u);
+                }
 
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                u.insertUser(u);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("File with credentials not found.");
             }
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }catch(IOException e){
-            System.out.println("File with credentials not found.");
         }
     }
 
