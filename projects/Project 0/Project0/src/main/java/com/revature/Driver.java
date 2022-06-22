@@ -5,6 +5,7 @@ import com.revature.services.AuthService;
 import com.revature.services.UserService;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Driver {
@@ -84,7 +85,19 @@ public class Driver {
         if(us.getUser(unverifiedUser) != null){
             System.out.println("Welcome Back, " +unverifiedUser.getUsername()+"!");
         }else {
-            System.out.println("Sorry. We could not find a user with those credentials.");
+            System.out.println("Sorry. We could not find a user with those credentials.\n" +
+                    "Try again? (y/n)");
+            String resp = sc.nextLine();
+            resp = resp.toLowerCase();
+            if(resp.equals("y")){
+                loginMenuPostgres();
+            }else if(resp.equals("n")){
+                System.out.println("Closing program.");
+                System.exit(0);
+            }else{
+                System.out.println("Command not recognized.\n" +
+                        "Exiting program.");
+            }
         }
     }
 }
