@@ -28,21 +28,4 @@ public class ConnectionUtil {
         return c;
     }
 
-    public static Connection getConnectionFromEnv() throws SQLException {
-        /*
-         * In windows, search for environment variables in search bar
-         * 	- set new system variables
-         *  - RESTART IDE TO RESET THE VARIABLE
-         */
-
-        String url = System.getenv("DB_URL");
-        String username = System.getenv("DB_USER");
-        String password = System.getenv("DB_PASS");
-
-        if (c == null || c.isClosed()) {
-            c = DriverManager.getConnection(url, username, password);
-        }
-
-        return c;
-    }
 }
