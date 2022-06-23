@@ -2,6 +2,8 @@ package com.revature.daos;
 
 import com.revature.models.Item;
 
+import java.util.List;
+
 public interface ItemDAOS {
 
     void changePrice(Item i, float price);
@@ -9,5 +11,7 @@ public interface ItemDAOS {
     Item getById(int id);
     Item getItem(Item i);
     Item getByItemName(String itemName);
+    List<Item> getAllAvailableItems();
+    void changeAvailability(Item i, boolean avail);
 
 }
