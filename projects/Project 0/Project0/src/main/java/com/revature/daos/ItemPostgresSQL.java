@@ -1,7 +1,6 @@
 package com.revature.daos;
 
 import com.revature.models.Item;
-import com.revature.models.User;
 import com.revature.util.ConnectionUtil;
 
 import java.io.IOException;
@@ -9,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemPostgresSQL implements ItemDAOS{
     @Override
@@ -152,5 +153,27 @@ public class ItemPostgresSQL implements ItemDAOS{
         }else{
             System.out.println("Item does not exist.");
         }
+    }
+
+    public List<Item> getAllAvailableItems(){
+        String sql = "select * from item;";
+        List<Item> itemList = new ArrayList();
+
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            PreparedStatement ps = c.prepareStatement(sql);
+
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Item i = getById(rs.getInt("id"));
+                itemList.add(i);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }catch(IOException e){
+            System.out.println("File with credentials not found.");
+        }
+        return itemList;
     }
 }
