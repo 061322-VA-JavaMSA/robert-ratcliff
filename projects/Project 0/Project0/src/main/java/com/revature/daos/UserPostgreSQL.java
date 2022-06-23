@@ -4,7 +4,10 @@ import com.revature.models.User;
 import com.revature.util.ConnectionUtil;
 
 import java.io.IOException;
-import java.sql.*; //change to specifics later.
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserPostgreSQL implements UserDAOS{
 
