@@ -8,7 +8,7 @@ public class Item {
     private int id;
     private String name;
     private String description;
-    private float price; //Will decide later on what data type.
+    private float price;
     private boolean available;
 
     @Override
