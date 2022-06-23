@@ -4,6 +4,8 @@ import com.revature.daos.ItemDAOS;
 import com.revature.daos.ItemPostgresSQL;
 import com.revature.models.Item;
 
+import java.util.List;
+
 public class ItemService {
 
     private ItemDAOS ids = new ItemPostgresSQL();
@@ -23,5 +25,9 @@ public class ItemService {
 
     public Item getItemName(String name){
         return ids.getByItemName(name);
+    }
+
+    public List<Item> getAllItems(){
+        return ids.getAllAvailableItems();
     }
 }
