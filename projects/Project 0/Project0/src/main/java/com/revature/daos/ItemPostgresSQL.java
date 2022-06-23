@@ -12,8 +12,29 @@ import java.sql.SQLException;
 
 public class ItemPostgresSQL implements ItemDAOS{
     @Override
-    public void changePrice(Item i) {
+    public void changePrice(Item i, float price) {
+        if(getItem(i) != null){
+            String sql = "update item set price = ? where item_name = ?;";
 
+            try (Connection c = ConnectionUtil.getConnectionFromFile()) {
+                PreparedStatement ps = c.prepareStatement(sql);
+                ps.setFloat(1, price);
+                ps.setString(2, i.getName());
+
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    i.setPrice(price);
+                    System.out.println("Item: " + i.getName() + " price has been created.");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("File with credentials not found.");
+            }
+        }else{
+            System.out.println("Item does not exist.");
+        }
     }
 
     @Override
@@ -106,5 +127,30 @@ public class ItemPostgresSQL implements ItemDAOS{
         }
 
         return i;
+    }
+
+    public void changeAvailability(Item i, boolean avail){
+        if(getItem(i) != null){
+            String sql = "update item set availability = ? where item_name = ?;";
+
+            try (Connection c = ConnectionUtil.getConnectionFromFile()) {
+                PreparedStatement ps = c.prepareStatement(sql);
+                ps.setBoolean(1, avail);
+                ps.setString(2, i.getName());
+
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    i.setAvailable(avail);
+                    System.out.println("Item: " + i.getName() + " availability has been created.");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("File with credentials not found.");
+            }
+        }else{
+            System.out.println("Item does not exist.");
+        }
     }
 }
