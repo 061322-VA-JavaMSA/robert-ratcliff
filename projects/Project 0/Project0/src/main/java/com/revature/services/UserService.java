@@ -23,4 +23,8 @@ public class UserService {
         return ud.getUser(u);
     }
 
+    public boolean userIsEmployee(User u){
+        return u.isEmployee();
+    }
+
 }
