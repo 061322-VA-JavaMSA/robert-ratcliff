@@ -4,7 +4,7 @@ import com.revature.models.Item;
 
 public interface ItemDAOS {
 
-    void changePrice(Item i);
+    void changePrice(Item i, float price);
     void insertItem(Item i);
     Item getById(int id);
     Item getItem(Item i);
