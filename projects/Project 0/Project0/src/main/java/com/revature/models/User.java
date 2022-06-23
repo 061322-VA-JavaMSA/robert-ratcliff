@@ -2,6 +2,7 @@ package com.revature.models;
 
 import com.revature.daos.UserDAOS;
 
+import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -9,6 +10,8 @@ public class User {
     private int userId;
     private String username;
     private String password;
+    private boolean isEmployee;
+    private List<Item> ownedItems;
 
 
     public void insertUser(User u) {
@@ -21,23 +24,24 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId && Objects.equals(username, user.username) && Objects.equals(password, user.password);
+        return userId == user.userId && isEmployee == user.isEmployee && username.equals(user.username) && password.equals(user.password) && Objects.equals(ownedItems, user.ownedItems);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, password);
+        return Objects.hash(userId, username, password, isEmployee, ownedItems);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userID=" + userId +
+                "userId=" + userId +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", isEmployee=" + isEmployee +
+                ", ownedItems=" + ownedItems +
                 '}';
     }
-
 
     public int getUserId() {
         return userId;
@@ -61,5 +65,20 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public boolean isEmployee() {
+        return isEmployee;
+    }
+
+    public void setEmployee(boolean employee) {
+        isEmployee = employee;
+    }
+
+    public List<Item> getOwnedItems() {
+        return ownedItems;
+    }
+
+    public void setOwnedItems(List<Item> ownedItems) {
+        this.ownedItems = ownedItems;
     }
 }
