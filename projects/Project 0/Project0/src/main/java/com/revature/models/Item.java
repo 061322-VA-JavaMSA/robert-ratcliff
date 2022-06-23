@@ -9,6 +9,7 @@ public class Item {
     private String name;
     private String description;
     private float price; //Will decide later on what data type.
+    private boolean available;
 
     @Override
     public String toString() {
@@ -74,7 +75,6 @@ public class Item {
         this.available = available;
     }
 
-    private boolean available;
     public void changePrice(Item i) {
 
     }
