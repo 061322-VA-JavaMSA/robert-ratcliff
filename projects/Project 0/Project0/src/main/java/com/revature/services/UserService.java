@@ -3,7 +3,10 @@ package com.revature.services;
 import com.revature.daos.UserArrayList;
 import com.revature.daos.UserDAOS;
 import com.revature.daos.UserPostgreSQL;
+import com.revature.models.Item;
 import com.revature.models.User;
+
+import java.util.List;
 
 public class UserService {
 
@@ -23,8 +26,6 @@ public class UserService {
         return ud.getUser(u);
     }
 
-    public boolean userIsEmployee(User u){
-        return u.isEmployee();
-    }
+    public List<Item> getOwnedItems(User u){return ud.getOwnedItems(u);}
 
 }

@@ -1,6 +1,8 @@
 package com.revature.daos;
 
+import com.revature.models.Item;
 import com.revature.models.User;
+import com.revature.services.ItemService;
 import com.revature.util.ConnectionUtil;
 
 import java.io.IOException;
@@ -8,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserPostgreSQL implements UserDAOS{
 
@@ -22,11 +26,9 @@ public class UserPostgreSQL implements UserDAOS{
                 ps.setString(1, u.getUsername());
                 ps.setString(2, u.getPassword());
 
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    u.insertUser(u);
-                    System.out.println("User: " + u.getUsername() + " has been created.");
-                }
+                ps.executeUpdate();
+                u.insertUser(u);
+                System.out.println("User: " + u.getUsername() + " has been created.");
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -122,4 +124,31 @@ public class UserPostgreSQL implements UserDAOS{
 
         return u;
     }
+
+    @Override
+    public List<Item> getOwnedItems(User u) {
+        String sql = "select * from owned_items where customer_id = ?; ";
+        ArrayList<Item> il = new ArrayList();
+
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, u.getUserId());
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                ItemService is = new ItemService();
+                Item i = is.getItemById(rs.getInt("item_id"));
+                il.add(i);
+            }
+            return il;
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }catch(IOException e){
+            System.out.println("File with credentials not found.");
+        }
+
+        return il;
+    }
+
+
 }
