@@ -33,6 +33,27 @@ public class SystemPostgreSQL implements SystemDAOS{
     }
 
     @Override
+    public float calculateItemPayment(User u , Item i){
+        float dues = 0;
+        String sql = "select sum(balance) as total from payment where customer_id = ? and item_id = ?;";
+        try (Connection c = ConnectionUtil.getConnectionFromFile()) {
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, u.getUserId());
+            ps.setInt(2, i.getId());
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                dues = rs.getFloat("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("File with credentials not found.");
+        }
+        return dues;
+    }
+
+    @Override
     public void rejectOtherOffers(Item i) {
         String sql = "update offer set accepted = 'rejected' where item_id = ? and accepted != 'accepted';";
         try (Connection c = ConnectionUtil.getConnectionFromFile()) {
