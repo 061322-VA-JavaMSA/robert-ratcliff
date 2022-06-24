@@ -35,4 +35,5 @@ public class ItemService {
     public Item getByItemName(String itemName){return ids.getByItemName(itemName);}
     public void changeAvailability(Item i, boolean avail){ids.changeAvailability(i, avail);}
     public void changePrice(Item i, float price){ids.changePrice(i,price);}
+    public void removeItem(Item i){ids.removeItem(i);}
 }
