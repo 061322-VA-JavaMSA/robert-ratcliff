@@ -82,7 +82,8 @@ public class Driver {
                     "4: Change price of an item. (Employee only)\n" +
                     "5: Remove item. (Employee only)\n" +
                     "6: Logout\n" +
-                    "7: Exit");
+                    "7: Exit\n" +
+                    "8: View owned items");
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":
@@ -92,8 +93,7 @@ public class Driver {
                         System.out.print("Name: " + i.getName() + " Price: " + i.getPrice() + "\n");
                     }
                     break;
-
-                case "2":
+                    case "2":
                     if (u.isEmployee()) {
                         System.out.println("Give the name of the item.");
                         String name = sc.nextLine();
@@ -113,7 +113,6 @@ public class Driver {
                         System.out.println("This option is for employees only.");
                         break;
                     }
-
                 case "3":
                     if (u.isEmployee()) {
                         System.out.println("Give the name of the item.");
@@ -128,7 +127,6 @@ public class Driver {
                         System.out.println("This option is for employees only.");
                         break;
                     }
-
                 case "4":
                     if (u.isEmployee()) {
                         System.out.println("Give the name of the item.");
@@ -143,7 +141,6 @@ public class Driver {
                         System.out.println("This option is for employees only.");
                         break;
                     }
-
                 case "5":
                     if (u.isEmployee()) {
                         System.out.println("Give the name of the item.");
@@ -156,13 +153,15 @@ public class Driver {
                         System.out.println("This option is for employees only.");
                         break;
                     }
-
                 case"6":
                     System.out.println("Are you sure you want to logout?(y/n)"); //add logic
                     main(null);
                 case "7":
                     System.out.println("Closing program");
                     System.exit(0);
+                case "8":
+                    System.out.println(us.getOwnedItems(u));
+                    break;
                 default:
                     System.out.println("Sorry, didn't understand that.");
             }
