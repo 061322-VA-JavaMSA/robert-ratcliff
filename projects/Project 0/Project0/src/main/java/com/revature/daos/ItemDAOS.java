@@ -13,5 +13,6 @@ public interface ItemDAOS {
     Item getByItemName(String itemName);
     List<Item> getAllAvailableItems();
     void changeAvailability(Item i, boolean avail);
+    void removeItem(Item i);
 
 }
