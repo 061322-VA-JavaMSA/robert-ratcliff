@@ -1,8 +1,6 @@
 package com.revature.services;
 
-import com.revature.daos.UserArrayList;
-import com.revature.daos.UserDAOS;
-import com.revature.daos.UserPostgreSQL;
+import com.revature.daos.*;
 import com.revature.models.Item;
 import com.revature.models.User;
 
@@ -11,6 +9,7 @@ import java.util.List;
 public class UserService {
 
     private UserDAOS ud = new UserPostgreSQL();
+    private SystemDAOS sd = new SystemPostgreSQL();
 
     public User createUser(User u) {
         ud.insertUser(u);
@@ -27,5 +26,7 @@ public class UserService {
     }
 
     public List<Item> getOwnedItems(User u){return ud.getOwnedItems(u);}
+    public float getWeeklyPayment(User u){return sd.calculateWeeklyPayment(u);}
+    public float getItemPayment(User u, Item i){return sd.calculateItemPayment(u, i);}
 
 }
