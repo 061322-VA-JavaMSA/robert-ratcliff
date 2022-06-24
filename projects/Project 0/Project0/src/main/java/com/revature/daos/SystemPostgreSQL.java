@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SystemPostgreSQL implements SystemDAOS{
 
@@ -51,6 +53,25 @@ public class SystemPostgreSQL implements SystemDAOS{
             System.out.println("File with credentials not found.");
         }
         return dues;
+    }
+
+    @Override
+    public List getAllPayments(){
+        List totals = new ArrayList();
+        String sql = "select sum(balance) as total from payment group by customer_id;";
+        try (Connection c = ConnectionUtil.getConnectionFromFile()) {
+            PreparedStatement ps = c.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                totals.add(rs.getFloat("total"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("File with credentials not found.");
+        }
+        return totals;
     }
 
     @Override

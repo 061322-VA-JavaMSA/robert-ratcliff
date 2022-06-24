@@ -28,5 +28,6 @@ public class UserService {
     public List<Item> getOwnedItems(User u){return ud.getOwnedItems(u);}
     public float getWeeklyPayment(User u){return sd.calculateWeeklyPayment(u);}
     public float getItemPayment(User u, Item i){return sd.calculateItemPayment(u, i);}
+    public List getTotalPayments(){return sd.getAllPayments();}
 
 }
