@@ -26,9 +26,12 @@ public class UserPostgreSQL implements UserDAOS{
                 ps.setString(1, u.getUsername());
                 ps.setString(2, u.getPassword());
 
-                ps.executeUpdate();
-                u.insertUser(u);
-                System.out.println("User: " + u.getUsername() + " has been created.");
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()) {
+                    u.insertUser(u);
+                    u.setUserId(rs.getInt("id"));
+                    System.out.println("User: " + u.getUsername() + " has been created.");
+                }
 
             } catch (SQLException e) {
                 e.printStackTrace();
