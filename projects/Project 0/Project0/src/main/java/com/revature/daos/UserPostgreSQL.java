@@ -111,6 +111,7 @@ public class UserPostgreSQL implements UserDAOS{
                 u.setUserId(rs.getInt("id"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
+                u.setEmployee(rs.getBoolean("isEmployee"));
                 return u;
             }
         }catch (SQLException e) {
