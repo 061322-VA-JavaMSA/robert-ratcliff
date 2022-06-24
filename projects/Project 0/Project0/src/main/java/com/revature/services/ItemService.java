@@ -30,4 +30,9 @@ public class ItemService {
     public List<Item> getAllItems(){
         return ids.getAllAvailableItems();
     }
+
+    public void insertItem(Item i){ids.insertItem(i);}
+    public Item getByItemName(String itemName){return ids.getByItemName(itemName);}
+    public void changeAvailability(Item i, boolean avail){ids.changeAvailability(i, avail);}
+    public void changePrice(Item i, float price){ids.changePrice(i,price);}
 }
