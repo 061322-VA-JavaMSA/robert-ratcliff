@@ -29,46 +29,49 @@ public class Driver {
     }
 
     public static void startMenu() {
-        System.out.println("Welcome to the Store!");
-        System.out.println("Select an option \n" +
-                "-1: Register\n" +
-                "-2: Login\n" +
-                "-3: Employee\n" +
-                "-4: Quit");
-        String choice = sc.nextLine();
+        boolean running = true;
+        while(running) {
+            System.out.println("Welcome to the Store!");
+            System.out.println("Select an option \n" +
+                    "-1: Register\n" +
+                    "-2: Login\n" +
+                    "-3: Employee\n" +
+                    "-4: Quit");
+            String choice = sc.nextLine();
 
-        switch (choice) {
-            case "1":
-                //register user
-                registerMenu();
-                homeMenu(); //add logic to make sure user in registered and logged in
-                break;
-            case "2":
-                //login user
-                loginMenuPostgres();
-                homeMenu(); //same a case "1"
-                break;
-            case "3":
-                int id = 11;
-                User u = us.getUserById(id);
-                boolean employee = u.isEmployee();
-                System.out.println("Is user " + u.getUsername() + " an employee? " + employee);
-                break;
-            case "4":
-                System.out.println("Are you sure you want to quit?(y/n)"); //add logic
-                System.exit(0);
-            default:
-                System.out.println("Sorry, I did not recognize that option\n" +
-                        "Try again? (y/n)");
-                String resp = sc.nextLine();
-
-                if (resp.equalsIgnoreCase("y")) {
-                    startMenu();
-                }
-                if (resp.equalsIgnoreCase("n")) {
-                    sc.close();
+            switch (choice) {
+                case "1":
+                    //register user
+                    registerMenu();
+                    //homeMenu(); //add logic to make sure user in registered and logged in
+                    break;
+                case "2":
+                    //login user
+                    loginMenuPostgres();
+                    homeMenu(); //same a case "1"
+                    break;
+                case "3":
+                    int id = 11;
+                    User u = us.getUserById(id);
+                    boolean employee = u.isEmployee();
+                    System.out.println("Is user " + u.getUsername() + " an employee? " + employee);
+                    break;
+                case "4":
+                    System.out.println("Are you sure you want to quit?(y/n)"); //add logic
                     System.exit(0);
-                }
+                default:
+                    System.out.println("Sorry, I did not recognize that option\n" +
+                            "Try again? (y/n)");
+                    String resp = sc.nextLine();
+
+                    if (resp.equalsIgnoreCase("y")) {
+                        startMenu();
+                    }
+                    if (resp.equalsIgnoreCase("n")) {
+                        sc.close();
+                        System.exit(0);
+                    }
+            }
         }
     }
 
@@ -85,7 +88,8 @@ public class Driver {
                     "7: Exit\n" +
                     "8: View owned items\n" +
                     "9: View total balance\n" +
-                    "10: View item balance");
+                    "10: View item balance\n" +
+                    "11: View all payments (Employee only)");
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":
@@ -173,6 +177,18 @@ public class Driver {
                     Item i = itemService.getByItemName(resp);
                     System.out.println("Your total balance on "+i.getName()+ " is: "+us.getItemPayment(u,i));
                     break;
+                case "11":
+                    if (u.isEmployee()) {
+                        System.out.println("The totals are: ");
+                        List l = us.getTotalPayments();
+                        for(int j = 0; j < l.size(); j++){
+                            System.out.println(l.get(j));
+                        }
+                        break;
+                    } else {
+                        System.out.println("This option is for employees only.");
+                        break;
+                    }
                 default:
                     System.out.println("Sorry, didn't understand that.");
             }
