@@ -2,6 +2,7 @@ package com.revature.models;
 
 import com.revature.daos.UserDAOS;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,6 +14,11 @@ public class User {
     private boolean isEmployee;
     private List<Item> ownedItems;
 
+
+    public User(){
+        super();
+        ownedItems = new ArrayList<>();
+    }
 
     public void insertUser(User u) {
         //do user stuff
@@ -66,19 +72,14 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public boolean isEmployee() {
-        return isEmployee;
-    }
+    public boolean isEmployee() { return isEmployee; }
 
-    public void setEmployee(boolean employee) {
-        isEmployee = employee;
-    }
+    public void setEmployee(boolean employee) { isEmployee = employee; }
 
-    public List<Item> getOwnedItems() {
-        return ownedItems;
-    }
+    public List<Item> getOwnedItems() { return ownedItems; }
 
-    public void setOwnedItems(List<Item> ownedItems) {
-        this.ownedItems = ownedItems;
-    }
+    //need to either change this method or make a new one that adds an element.
+    public void setOwnedItems(List<Item> ownedItems) { this.ownedItems = ownedItems; }
+
+    public void addOwnedItems(Item i){ownedItems.add(i);}
 }
