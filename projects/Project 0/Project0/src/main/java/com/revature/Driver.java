@@ -83,7 +83,9 @@ public class Driver {
                     "5: Remove item. (Employee only)\n" +
                     "6: Logout\n" +
                     "7: Exit\n" +
-                    "8: View owned items");
+                    "8: View owned items\n" +
+                    "9: View total balance\n" +
+                    "10: View item balance");
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":
@@ -161,6 +163,15 @@ public class Driver {
                     System.exit(0);
                 case "8":
                     System.out.println(us.getOwnedItems(u));
+                    break;
+                case"9":
+                    System.out.println("Your total balance is: "+us.getWeeklyPayment(u));
+                    break;
+                case "10":
+                    System.out.println("Which item would you like to know the payment for?");
+                    String resp = sc.nextLine();
+                    Item i = itemService.getByItemName(resp);
+                    System.out.println("Your total balance on "+i.getName()+ " is: "+us.getItemPayment(u,i));
                     break;
                 default:
                     System.out.println("Sorry, didn't understand that.");
