@@ -69,7 +69,10 @@ public class Driver {
 
     public static void homeMenu(){
         System.out.println("What do you want to do?\n" +
-                "1: View Store");
+                "1: View Store,\n" +
+                "2: Insert item. (Employee only)\n" +
+                "3: Change availability of an item. (Employee only)\n" +
+                "4: Change price of an item. (Employee only)");
         String choice = sc.nextLine();
         switch(choice){
             case "1":
@@ -79,6 +82,57 @@ public class Driver {
                     System.out.print(i + "\n");
                 }
                 break;
+
+            case "2":
+                if(u.isEmployee()){
+                    System.out.println("Give the name of the item.");
+                    String name = sc.nextLine();
+                    System.out.println("Give the price of the item.");
+                    float price = sc.nextFloat();
+                    sc.nextLine();
+                    System.out.println("Is the item available? Type true or false.");
+                    boolean avail = sc.nextBoolean();
+                    sc.nextLine();
+                    Item i = new Item();
+                    i.setName(name);
+                    i.setPrice(price);
+                    i.setAvailable(avail);
+                    itemService.insertItem(i);
+                    break;
+                }else{
+                    System.out.println("This option is for employees only.");
+                    break;
+                }
+
+            case "3":
+                if(u.isEmployee()){
+                    System.out.println("Give the name of the item.");
+                    String name = sc.nextLine();
+                    System.out.println("What will the availability be? Type true or false.");
+                    boolean avail = sc.nextBoolean();
+                    sc.nextLine();
+                    Item i = itemService.getByItemName(name);
+                    itemService.changeAvailability(i, avail);
+                    break;
+                }else{
+                    System.out.println("This option is for employees only.");
+                    break;
+                }
+
+            case "4":
+                if(u.isEmployee()){
+                    System.out.println("Give the name of the item.");
+                    String name = sc.nextLine();
+                    System.out.println("What is the new price?");
+                    float price = sc.nextFloat();
+                    sc.nextLine();
+                    Item i = itemService.getByItemName(name);
+                    itemService.changePrice(i, price);
+                    break;
+                }else{
+                    System.out.println("This option is for employees only.");
+                    break;
+                }
             default:
                 System.out.println("Sorry, didn't understand that.");
         }
@@ -103,8 +157,8 @@ public class Driver {
         System.out.println("Please enter your password:");
         unverifiedUser.setPassword(sc.nextLine());
         if(us.getUser(unverifiedUser) != null){
-            u = unverifiedUser;
-            System.out.println("Welcome Back, " +unverifiedUser.getUsername()+"!");
+            u = us.getUser(unverifiedUser);
+            System.out.println("Welcome Back, " +unverifiedUser+"!");
         }else {
             System.out.println("Sorry. We could not find a user with those credentials.\n" +
                     "Try again? (y/n)");
