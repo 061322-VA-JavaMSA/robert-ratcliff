@@ -152,7 +152,7 @@ public class ItemPostgresSQL implements ItemDAOS{
     }
 
     public List<Item> getAllAvailableItems(){
-        String sql = "select * from item;";
+        String sql = "select * from item where availability = true;";
         List<Item> itemList = new ArrayList();
 
         try(Connection c = ConnectionUtil.getConnectionFromFile()){
@@ -171,5 +171,25 @@ public class ItemPostgresSQL implements ItemDAOS{
             System.out.println("File with credentials not found.");
         }
         return itemList;
+    }
+
+    @Override
+    public void removeItem(Item i) {
+        if(getItem(i) == null){
+            System.out.println("Can't remove item, as this item does not exist in the database.");
+        }else{
+            String sql = "delete from item where item_name = ?;";
+            try (Connection c = ConnectionUtil.getConnectionFromFile()) {
+                PreparedStatement ps = c.prepareStatement(sql);
+                ps.setString(1, i.getName());
+
+                ps.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("File with credentials not found.");
+            }
+        }
     }
 }
