@@ -58,13 +58,15 @@ public class SystemPostgreSQL implements SystemDAOS{
     @Override
     public List getAllPayments(){
         List totals = new ArrayList();
-        String sql = "select sum(balance) as total from payment group by customer_id;";
+        String sql = "select sum(p.balance) as total, c.username from payment as p " +
+                "join customer c ON c.id = p.customer_id  group by c.username;";
         try (Connection c = ConnectionUtil.getConnectionFromFile()) {
             PreparedStatement ps = c.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                totals.add(rs.getFloat("total"));
+            while(rs.next()) {
+
+                totals.add("User, "+rs.getString("username")+ ", totals are: " +rs.getFloat("total"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,7 +94,7 @@ public class SystemPostgreSQL implements SystemDAOS{
     }
 
     @Override
-    public void updateOwnership(User u, Item i) {
+    public void updateOwnership(User u, Item i, float amount) {
 
             String sql = "begin;" +
                     "insert into owned_items (customer_id, item_id) values (?,?);" +
@@ -104,7 +106,7 @@ public class SystemPostgreSQL implements SystemDAOS{
                 ps.setInt(2, i.getId());
                 ps.setInt(3, u.getUserId());
                 ps.setInt(4, i.getId());
-                ps.setFloat(5, i.getPrice());
+                ps.setFloat(5, amount);
 
                 ps.executeUpdate();
                 u.addOwnedItems(i);
@@ -116,4 +118,49 @@ public class SystemPostgreSQL implements SystemDAOS{
                 System.out.println("File with credentials not found.");
             }
     }
+
+    @Override
+    public List getAllOffers() {
+        List l = new ArrayList();
+        String sql = "select * from offer where accepted = 'pending';";
+        try (Connection c = ConnectionUtil.getConnectionFromFile()) {
+            PreparedStatement ps = c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                l.add("Customer id: "+ rs.getInt("customer_id") +
+                        " Item_id: " +rs.getInt("item_id")+
+                        " Amount: " +rs.getFloat("amount"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("File with credentials not found.");
+        }
+        return l;
+    }
+
+    @Override
+    public float getItemOffer(User u, Item i){
+        String sql = "select amount from offer where customer_id = ? and item_id = ?;";
+        float amount = 0f;
+
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, u.getUserId());
+            ps.setInt(2,i.getId());
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                amount = rs.getFloat("amount");
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }catch(IOException e){
+            System.out.println("File with credentials not found.");
+        }
+        return amount;
+    }
+
 }

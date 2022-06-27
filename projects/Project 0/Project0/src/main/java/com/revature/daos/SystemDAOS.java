@@ -11,5 +11,7 @@ public interface SystemDAOS {
     float calculateItemPayment(User u, Item i);
     List getAllPayments();
     void rejectOtherOffers(Item i);
-    void updateOwnership(User u, Item i);
+    void updateOwnership(User u, Item i, float amount);
+    List getAllOffers();
+    public float getItemOffer(User u, Item i);
 }
