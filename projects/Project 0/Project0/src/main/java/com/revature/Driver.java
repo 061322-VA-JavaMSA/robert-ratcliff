@@ -4,6 +4,7 @@ import com.revature.models.Item;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 import com.revature.services.ItemService;
+import com.revature.services.SystemService;
 import com.revature.services.UserService;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class Driver {
     static UserService us;
     static User u;
     static ItemService itemService;
+    static SystemService sys;
 
     //static StoreItems si; //will be used to test users being able to see items
     public static void main(String[] args) {
@@ -25,12 +27,14 @@ public class Driver {
         us = new UserService();
         u = new User();
         itemService = new ItemService();
+        sys = new SystemService();
+
         startMenu();
     }
 
     public static void startMenu() {
         boolean running = true;
-        while(running) {
+        while(running) { //NOTE this is an infinite loop, but this method has ways to leave this loop or exit program.
             System.out.println("Welcome to the Store!");
             System.out.println("Select an option \n" +
                     "-1: Register\n" +
@@ -86,7 +90,7 @@ public class Driver {
 
     public static void homeMenu() {
         boolean running = true;
-        while (running) {
+        while (running) { //NOTE this is an infinite loop, but this method has ways to leave this loop or exit program.
             System.out.println("What do you want to do?\n" +
                     "1: View Store,\n" +
                     "2: Insert item. (Employee only)\n" +
@@ -98,7 +102,10 @@ public class Driver {
                     "8: View owned items\n" +
                     "9: View total balance\n" +
                     "10: View item balance\n" +
-                    "11: View all payments (Employee only)");
+                    "11: View all payments (Employee only)\n" +
+                    "12: Make offer.\n" +
+                    "13: View all offers (Employee only)\n" +
+                    "14: Accept an offer (Employee only)");
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":
@@ -187,21 +194,62 @@ public class Driver {
                     System.out.println(us.getOwnedItems(u));
                     break;
                 case"9":
-                    System.out.println("Your total balance is: "+us.getWeeklyPayment(u));
+                    System.out.println("Your total balance is: "+sys.getWeeklyPayment(u));
                     break;
                 case "10":
                     System.out.println("Which item would you like to know the payment for?");
                     String resp1 = sc.nextLine();
                     Item i = itemService.getByItemName(resp1);
-                    System.out.println("Your total balance on "+i.getName()+ " is: "+us.getItemPayment(u,i));
+                    System.out.println("Your total balance on "+i.getName()+ " is: "+sys.getItemPayment(u,i));
                     break;
                 case "11":
                     if (u.isEmployee()) {
                         System.out.println("The totals are: ");
-                        List l = us.getTotalPayments();
-                        for(int j = 0; j < l.size(); j++){
+                        List l = sys.getTotalPayments();
+                        for(int j = 0; j < l.size() ; j++){
                             System.out.println(l.get(j));
                         }
+                        break;
+                    } else {
+                        System.out.println("This option is for employees only.");
+                        break;
+                    }
+                case "12":
+                    System.out.println("What item do you want to make an offer on?");
+                    Item myItem = itemService.getByItemName(sc.nextLine());
+                    System.out.println("What is the amount you are offering?");
+                    float offer = sc.nextFloat();
+                    sc.nextLine();
+                    us.makeOffer(u,myItem,offer);
+                    break;
+                case "13":
+                    if (u.isEmployee()) {
+                        System.out.println("The offers are: ");
+                        List l = sys.getAllOffers();
+                        for(int j = 0; j < l.size() ; j++){
+                            System.out.println(l.get(j));
+                        }
+                        break;
+                    } else {
+                        System.out.println("This option is for employees only.");
+                        break;
+                    }
+                case "14":
+                    if (u.isEmployee()) {
+                        System.out.println("The offers are: ");
+                        List l = sys.getAllOffers();
+                        for(int j = 0; j < l.size() ; j++){
+                            System.out.println(l.get(j));
+                        }
+                        System.out.println("Which customer id will you accept their offer?");
+                        User offerUser = us.getUserById(sc.nextInt());
+                        sc.nextLine();
+                        System.out.print("For which item id?");
+                        Item offerItem = itemService.getItemById(sc.nextInt());
+                        sc.nextLine();
+                        float amount = sys.getItemOffer(offerUser, offerItem);
+                        us.acceptOffer(offerUser,offerItem);
+                        sys.updateOwnership(offerUser,offerItem,amount);
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
