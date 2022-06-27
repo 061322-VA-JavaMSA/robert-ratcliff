@@ -153,5 +153,38 @@ public class UserPostgreSQL implements UserDAOS{
         return il;
     }
 
+    @Override
+    public void makeOffer(User u, Item i, float amount) {
+        String sql = "insert into offer (customer_id, item_id, amount) values (?, ?, ?);";
 
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, u.getUserId());
+            ps.setInt(2,i.getId());
+            ps.setFloat(3, amount);
+
+            ps.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }catch(IOException e){
+            System.out.println("File with credentials not found.");
+        }
+    }
+
+    @Override
+    public void acceptOffer(User u, Item i){
+        String sql = "update offer set accepted = 'accepted' where customer_id = ? and item_id = ?;";
+
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, u.getUserId());
+            ps.setInt(2,i.getId());
+
+            ps.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }catch(IOException e){
+            System.out.println("File with credentials not found.");
+        }
+    }
 }

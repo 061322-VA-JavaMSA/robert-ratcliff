@@ -13,5 +13,7 @@ public interface UserDAOS {
     User getByUsername(String username);
     User getByLogin(String username, String passwd);
     List<Item> getOwnedItems(User u);
+    void makeOffer(User u, Item i, float amount);
+    public void acceptOffer(User u, Item i);
 
 }
