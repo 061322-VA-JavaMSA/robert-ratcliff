@@ -24,10 +24,10 @@ public class UserService {
     public User getUser(User u){
         return ud.getUser(u);
     }
+    public User getByUsername(String username){return ud.getByUsername(username);}
 
     public List<Item> getOwnedItems(User u){return ud.getOwnedItems(u);}
-    public float getWeeklyPayment(User u){return sd.calculateWeeklyPayment(u);}
-    public float getItemPayment(User u, Item i){return sd.calculateItemPayment(u, i);}
-    public List getTotalPayments(){return sd.getAllPayments();}
+    public void makeOffer(User u, Item i, float amount){ud.makeOffer(u,i,amount);}
+    public void acceptOffer(User u, Item i){ud.acceptOffer(u,i);}
 
 }
