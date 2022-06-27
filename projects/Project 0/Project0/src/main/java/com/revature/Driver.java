@@ -58,16 +58,25 @@ public class Driver {
                     break;
                 case "4":
                     System.out.println("Are you sure you want to quit?(y/n)"); //add logic
-                    System.exit(0);
+                    String resp = sc.nextLine();
+                    if(resp.equalsIgnoreCase("y")){
+                        sc.close();
+                        System.exit(0);
+                    } else if (resp.equalsIgnoreCase("n")){
+                        break;
+                    } else{
+                        System.out.println("Sorry, didn't understand that.");
+                        break;
+                    }
                 default:
                     System.out.println("Sorry, I did not recognize that option\n" +
                             "Try again? (y/n)");
-                    String resp = sc.nextLine();
+                    String resp1 = sc.nextLine();
 
-                    if (resp.equalsIgnoreCase("y")) {
+                    if (resp1.equalsIgnoreCase("y")) {
                         startMenu();
                     }
-                    if (resp.equalsIgnoreCase("n")) {
+                    if (resp1.equalsIgnoreCase("n")) {
                         sc.close();
                         System.exit(0);
                     }
@@ -161,9 +170,18 @@ public class Driver {
                     }
                 case"6":
                     System.out.println("Are you sure you want to logout?(y/n)"); //add logic
-                    main(null);
+                    String resp = sc.nextLine();
+                    if(resp.equalsIgnoreCase("y")){
+                        main(null);
+                    } else if (resp.equalsIgnoreCase("n")){
+                        break;
+                    } else{
+                        System.out.println("Sorry, didn't understand that.");
+                        break;
+                    }
                 case "7":
                     System.out.println("Closing program");
+                    sc.close();
                     System.exit(0);
                 case "8":
                     System.out.println(us.getOwnedItems(u));
@@ -173,8 +191,8 @@ public class Driver {
                     break;
                 case "10":
                     System.out.println("Which item would you like to know the payment for?");
-                    String resp = sc.nextLine();
-                    Item i = itemService.getByItemName(resp);
+                    String resp1 = sc.nextLine();
+                    Item i = itemService.getByItemName(resp1);
                     System.out.println("Your total balance on "+i.getName()+ " is: "+us.getItemPayment(u,i));
                     break;
                 case "11":
