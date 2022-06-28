@@ -1,8 +1,11 @@
 package com.revature.daos;
 
+import com.revature.Driver;
 import com.revature.models.Item;
 import com.revature.models.User;
 import com.revature.util.ConnectionUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,6 +17,7 @@ import java.util.List;
 
 public class SystemPostgreSQL implements SystemDAOS{
 
+    private static Logger log = LogManager.getLogger(SystemPostgreSQL.class);
     @Override
     public float calculateWeeklyPayment(User u) {
         float dues = 0;
@@ -27,9 +31,9 @@ public class SystemPostgreSQL implements SystemDAOS{
                 dues = rs.getFloat("total");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         } catch (IOException e) {
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return dues;
     }
@@ -48,9 +52,9 @@ public class SystemPostgreSQL implements SystemDAOS{
                 dues = rs.getFloat("total");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         } catch (IOException e) {
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return dues;
     }
@@ -69,9 +73,9 @@ public class SystemPostgreSQL implements SystemDAOS{
                 totals.add("User, "+rs.getString("username")+ ", totals are: " +rs.getFloat("total"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         } catch (IOException e) {
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return totals;
     }
@@ -87,9 +91,9 @@ public class SystemPostgreSQL implements SystemDAOS{
             System.out.println("All other offers for Item, " +i.getName()+ ", rejected.");
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         } catch (IOException e) {
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
     }
 
@@ -113,9 +117,9 @@ public class SystemPostgreSQL implements SystemDAOS{
                 System.out.println("Item: " + i.getName() + " has a new owner " +u.getUsername());
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("SQL exception was thrown: " + e.fillInStackTrace());
             } catch (IOException e) {
-                System.out.println("File with credentials not found.");
+                log.error("File with credentials not found.");
             }
     }
 
@@ -134,9 +138,9 @@ public class SystemPostgreSQL implements SystemDAOS{
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         } catch (IOException e) {
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return l;
     }
@@ -156,11 +160,36 @@ public class SystemPostgreSQL implements SystemDAOS{
                 amount = rs.getFloat("amount");
             }
         }catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return amount;
+    }
+
+    @Override
+    public boolean isOfferAccepted(User u, Item i) {
+        String sql = "select accepted from offer where customer_id = ? and item_id = ?;";
+        boolean accepted = false;
+
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, u.getUserId());
+            ps.setInt(2,i.getId());
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String acceptance = rs.getString("accepted");
+                if(acceptance.equalsIgnoreCase("accepted")){
+                    accepted = true;
+                }
+            }
+        }catch (SQLException e) {
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
+        }catch(IOException e){
+            log.error("File with credentials not found.");
+        }
+        return accepted;
     }
 
 }

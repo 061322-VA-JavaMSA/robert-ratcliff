@@ -13,5 +13,6 @@ public interface SystemDAOS {
     void rejectOtherOffers(Item i);
     void updateOwnership(User u, Item i, float amount);
     List getAllOffers();
-    public float getItemOffer(User u, Item i);
+    float getItemOffer(User u, Item i);
+    boolean isOfferAccepted(User u, Item i);
 }

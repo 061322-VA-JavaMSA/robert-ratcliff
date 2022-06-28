@@ -2,6 +2,8 @@ package com.revature.daos;
 
 import com.revature.models.Item;
 import com.revature.util.ConnectionUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemPostgresSQL implements ItemDAOS{
+
+    private static Logger log = LogManager.getLogger(ItemPostgresSQL.class);
     @Override
     public void changePrice(Item i, float price) {
         if(getItem(i) != null){
@@ -27,9 +31,9 @@ public class ItemPostgresSQL implements ItemDAOS{
                 System.out.println("Item: " + i.getName() + " price has been created.");
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("SQL exception was thrown: " + e.fillInStackTrace());
             } catch (IOException e) {
-                System.out.println("File with credentials not found.");
+                log.error("File with credentials not found.");
             }
         }else{
             System.out.println("Item does not exist.");
@@ -41,11 +45,12 @@ public class ItemPostgresSQL implements ItemDAOS{
         if(getItem(i) != null){
             System.out.println("Can't insert item, as this item already exists in the database.");
         }else{
-            String sql = "insert into item (item_name, price) values (?,?) returning id;";
+            String sql = "insert into item (item_name, price, availability) values (?,?,?) returning id;";
             try (Connection c = ConnectionUtil.getConnectionFromFile()) {
                 PreparedStatement ps = c.prepareStatement(sql);
                 ps.setString(1, i.getName());
                 ps.setFloat(2, i.getPrice());
+                ps.setBoolean(3, i.isAvailable());
 
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
@@ -54,9 +59,9 @@ public class ItemPostgresSQL implements ItemDAOS{
                 }
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("SQL exception was thrown: " + e.fillInStackTrace());
             } catch (IOException e) {
-                System.out.println("File with credentials not found.");
+                log.error("File with credentials not found.");
             }
         }
 
@@ -81,9 +86,9 @@ public class ItemPostgresSQL implements ItemDAOS{
                 i.setPrice(rs.getFloat("price"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return i;
     }
@@ -120,9 +125,9 @@ public class ItemPostgresSQL implements ItemDAOS{
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
 
         return i;
@@ -142,9 +147,9 @@ public class ItemPostgresSQL implements ItemDAOS{
                 System.out.println("Item: " + i.getName() + " availability has been changed.");
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("SQL exception was thrown: " + e.fillInStackTrace());
             } catch (IOException e) {
-                System.out.println("File with credentials not found.");
+                log.error("File with credentials not found.");
             }
         }else{
             System.out.println("Item does not exist.");
@@ -166,9 +171,9 @@ public class ItemPostgresSQL implements ItemDAOS{
                 itemList.add(i);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return itemList;
     }
@@ -186,9 +191,9 @@ public class ItemPostgresSQL implements ItemDAOS{
                 ps.executeUpdate();
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("SQL exception was thrown: " + e.fillInStackTrace());
             } catch (IOException e) {
-                System.out.println("File with credentials not found.");
+                log.error("File with credentials not found.");
             }
         }
     }

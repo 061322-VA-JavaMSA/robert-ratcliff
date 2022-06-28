@@ -11,9 +11,8 @@ public class UserService {
     private UserDAOS ud = new UserPostgreSQL();
     private SystemDAOS sd = new SystemPostgreSQL();
 
-    public User createUser(User u) {
+    public void createUser(User u) {
         ud.insertUser(u);
-        return u;
     }
 
     public User getUserById(int id) {

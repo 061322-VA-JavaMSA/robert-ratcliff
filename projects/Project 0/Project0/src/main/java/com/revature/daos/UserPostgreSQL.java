@@ -4,6 +4,8 @@ import com.revature.models.Item;
 import com.revature.models.User;
 import com.revature.services.ItemService;
 import com.revature.util.ConnectionUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserPostgreSQL implements UserDAOS{
+
+    private static Logger log = LogManager.getLogger(UserPostgreSQL.class);
 
     @Override
     public void insertUser(User u) {
@@ -34,9 +38,9 @@ public class UserPostgreSQL implements UserDAOS{
                 }
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("SQL exception was thrown: " + e.fillInStackTrace());
             } catch (IOException e) {
-                System.out.println("File with credentials not found.");
+                log.error("File with credentials not found.");
             }
         }
     }
@@ -60,9 +64,9 @@ public class UserPostgreSQL implements UserDAOS{
                 user.setPassword(rs.getString("password"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
         return user;
     }
@@ -92,9 +96,9 @@ public class UserPostgreSQL implements UserDAOS{
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
 
         return u;
@@ -120,9 +124,9 @@ public class UserPostgreSQL implements UserDAOS{
                 return u;
             }
         }catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
 
         return u;
@@ -145,9 +149,9 @@ public class UserPostgreSQL implements UserDAOS{
             }
             return il;
         }catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
 
         return il;
@@ -165,9 +169,9 @@ public class UserPostgreSQL implements UserDAOS{
 
             ps.executeUpdate();
         }catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
     }
 
@@ -182,9 +186,9 @@ public class UserPostgreSQL implements UserDAOS{
 
             ps.executeUpdate();
         }catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
         }catch(IOException e){
-            System.out.println("File with credentials not found.");
+            log.error("File with credentials not found.");
         }
     }
 }

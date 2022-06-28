@@ -9,6 +9,8 @@ import com.revature.services.UserService;
 
 import java.util.List;
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Driver {
 
@@ -18,6 +20,7 @@ public class Driver {
     static User u;
     static ItemService itemService;
     static SystemService sys;
+    private static Logger log = LogManager.getLogger(Driver.class);
 
     //static StoreItems si; //will be used to test users being able to see items
     public static void main(String[] args) {
@@ -45,14 +48,11 @@ public class Driver {
 
             switch (choice) {
                 case "1":
-                    //register user
                     registerMenu();
-                    //homeMenu(); //add logic to make sure user in registered and logged in
                     break;
                 case "2":
-                    //login user
                     loginMenuPostgres();
-                    homeMenu(); //same a case "1"
+                    homeMenu();
                     break;
                 case "3":
                     int id = 11;
@@ -130,9 +130,11 @@ public class Driver {
                         i.setPrice(price);
                         i.setAvailable(avail);
                         itemService.insertItem(i);
+                        log.info("Item "+i.getName()+" has been added.");
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
+                        log.info("User: "+u.getUsername()+" has tried to access Employee only function");
                         break;
                     }
                 case "3":
@@ -144,9 +146,11 @@ public class Driver {
                         sc.nextLine();
                         Item i = itemService.getByItemName(name);
                         itemService.changeAvailability(i, avail);
+                        log.info("Item "+i.getName()+" availability has been changed to "+avail);
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
+                        log.info("User: "+u.getUsername()+" has tried to access Employee only function");
                         break;
                     }
                 case "4":
@@ -158,9 +162,11 @@ public class Driver {
                         sc.nextLine();
                         Item i = itemService.getByItemName(name);
                         itemService.changePrice(i, price);
+                        log.info("Item "+i.getName()+" price has been changed to "+price);
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
+                        log.info("User: "+u.getUsername()+" has tried to access Employee only function");
                         break;
                     }
                 case "5":
@@ -170,15 +176,18 @@ public class Driver {
                         Item i = new Item();
                         i.setName(name);
                         itemService.removeItem(i);
+                        log.info("Item "+i.getName()+" has been removed.");
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
+                        log.info("User: "+u.getUsername()+" has tried to access Employee only function");
                         break;
                     }
                 case"6":
-                    System.out.println("Are you sure you want to logout?(y/n)"); //add logic
+                    System.out.println("Are you sure you want to logout?(y/n)");
                     String resp = sc.nextLine();
                     if(resp.equalsIgnoreCase("y")){
+                        log.info("User: "+u.getUsername()+" is logging out");
                         main(null);
                     } else if (resp.equalsIgnoreCase("n")){
                         break;
@@ -187,9 +196,18 @@ public class Driver {
                         break;
                     }
                 case "7":
-                    System.out.println("Closing program");
-                    sc.close();
-                    System.exit(0);
+                    System.out.println("Are you sure you want to quit?(y/n)");
+                    String resp2 = sc.nextLine();
+                    if(resp2.equalsIgnoreCase("y")){
+                        sc.close();
+                        log.info("Program shutting down.");
+                        System.exit(0);
+                    } else if (resp2.equalsIgnoreCase("n")){
+                        break;
+                    } else{
+                        System.out.println("Sorry, didn't understand that.");
+                        break;
+                    }
                 case "8":
                     System.out.println(us.getOwnedItems(u));
                     break;
@@ -212,6 +230,7 @@ public class Driver {
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
+                        log.info("User: "+u.getUsername()+" has tried to access Employee only function");
                         break;
                     }
                 case "12":
@@ -221,6 +240,7 @@ public class Driver {
                     float offer = sc.nextFloat();
                     sc.nextLine();
                     us.makeOffer(u,myItem,offer);
+                    log.info("User: "+u.getUsername()+" has made an offer of "+offer+" on item, "+myItem);
                     break;
                 case "13":
                     if (u.isEmployee()) {
@@ -232,6 +252,7 @@ public class Driver {
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
+                        log.info("User: "+u.getUsername()+" has tried to access Employee only function");
                         break;
                     }
                 case "14":
@@ -250,9 +271,12 @@ public class Driver {
                         float amount = sys.getItemOffer(offerUser, offerItem);
                         us.acceptOffer(offerUser,offerItem);
                         sys.updateOwnership(offerUser,offerItem,amount);
+                        sys.rejectOtherOffers(offerItem);
+                        log.info("Offer accepted for User: "+ offerUser.getUsername()+ " for item: "+ offerItem.getName());
                         break;
                     } else {
                         System.out.println("This option is for employees only.");
+                        log.info("User: "+u.getUsername()+" has tried to access Employee only function");
                         break;
                     }
                 default:
@@ -268,7 +292,9 @@ public class Driver {
         newUser.setUsername(sc.nextLine());
         System.out.println("Please enter your password:");
         newUser.setPassword(sc.nextLine());
-        u = us.createUser(newUser);
+        us.createUser(newUser);
+        u = us.getUser(newUser);
+        log.info("New user: "+u.getUsername()+ " has been created.");
     }
 
 
@@ -282,9 +308,11 @@ public class Driver {
         if (us.getUser(unverifiedUser) != null) {
             u = us.getUser(unverifiedUser);
             System.out.println("Welcome Back, " + unverifiedUser.getUsername() + "!");
+            log.info("User login: "+unverifiedUser.getUsername());
         } else {
             System.out.println("Sorry. We could not find a user with those credentials.\n" +
                     "Try again? (y/n)");
+            log.info("Failed user login for user: "+unverifiedUser.getUsername());
             String resp = sc.nextLine();
             resp = resp.toLowerCase();
             if (resp.equals("y")) {
@@ -295,6 +323,7 @@ public class Driver {
             } else {
                 System.out.println("Command not recognized.\n" +
                         "Exiting program.");
+                System.exit(0);
             }
         }
     }
