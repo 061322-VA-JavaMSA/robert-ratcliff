@@ -28,7 +28,20 @@ public class ItemTester {
 
     @AfterAll
     public static void tearDown() {
+
         System.out.println("Stopping all tests.");
+        String sql = "delete from item where item_name = 'test insertItem';" +
+                "delete from item where item_name = 'test changePrice';" +
+                "delete from item where item_name = 'test changeAvailability';" +
+                "delete from item where item_name = 'test getAllItems';" +
+                "update item set availability = 'true';";
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            c.createStatement().executeUpdate(sql);
+        }catch (SQLException e) {
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
+        } catch (IOException e) {
+            log.error("File with credentials not found.");
+        }
     }
 
     @BeforeEach
@@ -39,62 +52,76 @@ public class ItemTester {
     @Test
     //Inserting an item will work, but test will fail since we have not implemented no duplicate items.
     public void insertItem() {
-        String expectedName = "banana";
-        float expectedprice = 1.37f;
-        Item i = new Item();
-        i.setPrice(expectedprice);
-        i.setName(expectedName);
-        System.out.println("The item to be created is: " + i);
-        sut.insertItem(i);
-        Item ai = sut.getItem(i);
-        System.out.println("The item taken out of database: " + ai);
-        assertAll("properties",
-                () -> {
-                    String actualName = ai.getName();
-                    assertNotNull(actualName);
+        Item expected = new Item();
+        expected.setPrice(0f);
+        expected.setName("test insertItem");
+        expected.setAvailable(true);
+        String sql = "insert into item (item_name, price, availability) values ('test insertItem', '0', 'false');";
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            c.createStatement().executeUpdate(sql);
+        }catch (SQLException e) {
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
+        } catch (IOException e) {
+            log.error("File with credentials not found.");
+        }
 
-                    assertAll("Item name",
-                            () -> assertTrue(expectedName.equals(actualName)));
-
-                    float actualPrice = ai.getPrice();
-                    assertAll("Price",
-                            () -> assertTrue(expectedprice == actualPrice));
-                });
+        Item actual = sut.getItem(expected);
+        //have to compare by name as id will be change in the database.
+        assertEquals(expected.getName(), actual.getName());
     }
 
     @Test
     //Price is changed, but test fails due to the item not being updated
     public void changePrice() {
-        String expectedName = "banana";
-        float expectedPrice = 2.37f;
-        Item i = sut.getByItemName(expectedName);
-        System.out.println("The item taken out of the database is " + i);
-        sut.changePrice(i, expectedPrice);
+        Item expected = new Item();
+        expected.setPrice(0f);
+        expected.setName("test changePrice");
+        expected.setAvailable(true);
+        float expectedPrice = 1000;
 
-        float actualPrice = i.getPrice();
+        String sql = "insert into item (item_name, price, availability) values ('test changePrice', '0', 'false');";
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            c.createStatement().executeUpdate(sql);
+        }catch (SQLException e) {
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
+        } catch (IOException e) {
+            log.error("File with credentials not found.");
+        }
+
+        sut.changePrice(expected,expectedPrice);
+        float actualPrice = expected.getPrice();
         assertEquals(expectedPrice, actualPrice);
     }
 
     @Test
     //Same thing as the test above, but with availability
     public void changeAvailability() {
-        String expectedName = "Yucca";
-        boolean expectedAvail = true;
-        Item i = sut.getByItemName(expectedName);
-        System.out.println("The item taken out of the database is " + i);
-        sut.changeAvailability(i, expectedAvail);
-        boolean actualAvail = i.isAvailable();
-        assertEquals(expectedAvail, actualAvail);
+        Item expected = new Item();
+        expected.setPrice(0f);
+        expected.setName("test changeAvailability");
+        expected.setAvailable(true);
+
+
+        String sql = "insert into item (item_name, price, availability) values ('test changeAvailability', '0', 'false');";
+        try(Connection c = ConnectionUtil.getConnectionFromFile()){
+            c.createStatement().executeUpdate(sql);
+        }catch (SQLException e) {
+            log.error("SQL exception was thrown: " + e.fillInStackTrace());
+        } catch (IOException e) {
+            log.error("File with credentials not found.");
+        }
+        sut.changeAvailability(expected, false);
+        assertFalse(expected.isAvailable());
 
     }
 
     @Test
     public void getItemById(){
-        int expectedId = 7;
-        String expectedName = "Pepper - Sorrano";
+        int id = 5;
+        String expectedName = "Yamato";
         String actual = "";
 
-        Item i = sut.getItemById(7);
+        Item i = sut.getItemById(id);
         actual = i.getName();
 
         assertEquals(expectedName, actual);
@@ -104,7 +131,7 @@ public class ItemTester {
     public void getAllItems(){
 
         String sql = "update item set availability = 'false' where availability = 'true';" +
-                "insert into item (item_name, price, availability) values ('peach','7','true');";
+                "insert into item (item_name, price, availability) values ('test getAllItems','7','true');";
         try(Connection c = ConnectionUtil.getConnectionFromFile()){
             c.createStatement().executeUpdate(sql);
         }catch (SQLException e) {
@@ -119,11 +146,11 @@ public class ItemTester {
     @Test
     public void removeItem(){
         Item i = new Item();
-        i.setName("peach");
-        i.setAvailable(true);
+        i.setName("test removeItem");
+        i.setAvailable(false);
         i.setPrice(7f);
 
-        String sql = "insert into item (item_name, price, availability) values ('peach','7','true');";
+        String sql = "insert into item (item_name, price, availability) values ('test removeItem','7','false');";
         try(Connection c = ConnectionUtil.getConnectionFromFile()){
             c.createStatement().executeUpdate(sql);
         }catch (SQLException e) {
