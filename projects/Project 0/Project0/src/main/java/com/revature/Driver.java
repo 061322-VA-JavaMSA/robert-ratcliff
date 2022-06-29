@@ -22,7 +22,6 @@ public class Driver {
     static SystemService sys;
     private static Logger log = LogManager.getLogger(Driver.class);
 
-    //static StoreItems si; //will be used to test users being able to see items
     public static void main(String[] args) {
 
         sc = new Scanner(System.in);
@@ -38,12 +37,13 @@ public class Driver {
     public static void startMenu() {
         boolean running = true;
         while(running) { //NOTE this is an infinite loop, but this method has ways to leave this loop or exit program.
-            System.out.println("Welcome to the Store!");
+            System.out.println("Welcome to the Legendary Item Auction House!\n" +
+                    "Where the items you thought only existed in media can be attained\n" +
+                    "with a generous bid. Limited supply!");
             System.out.println("Select an option \n" +
-                    "-1: Register\n" +
-                    "-2: Login\n" +
-                    "-3: Employee\n" +
-                    "-4: Quit");
+                    "1: Register\n" +
+                    "2: Login\n" +
+                    "3: Quit");
             String choice = sc.nextLine();
 
             switch (choice) {
@@ -55,12 +55,6 @@ public class Driver {
                     homeMenu();
                     break;
                 case "3":
-                    int id = 11;
-                    User u = us.getUserById(id);
-                    boolean employee = u.isEmployee();
-                    System.out.println("Is user " + u.getUsername() + " an employee? " + employee);
-                    break;
-                case "4":
                     System.out.println("Are you sure you want to quit?(y/n)"); //add logic
                     String resp = sc.nextLine();
                     if(resp.equalsIgnoreCase("y")){
