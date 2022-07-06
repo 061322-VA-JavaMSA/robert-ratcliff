@@ -2,9 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test Page!</title>
+    <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <h1>This is a test page!</h1>
+    <main class="container-fluid mx-auto " style="padding: 0 7.5em;">
+        <div class="container align-content-center" id="loginForm">
+            <form style="padding-top: 2.5em;">
+                <div id="bottomBorder" class="d-flex justify-content-center">
+                    <h1 class="display-4">Login</h1>
+                </div>
+                <hr>
+                <br>
+                <div class="d-flex justify-content-center">
+                    <label>Username:</label>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <input class="inputstyle" type="text" name="username" id="username">
+                </div>
+                <br>
+                <div class="d-flex justify-content-center">
+                    <label>Password:</label>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <input class="inputstyle" type="password" name="password" id="password">
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="d-flex justify-content-center">
+                    <input class="btn btn-outline-secondary" value="Login" id="submitButton">
+                </div>
+                <br>
+                <br>
+                <div class="d-flex justify-content-center">
+                    <div style="color:red;" id="error-div"></div>
+                </div>
+            </form>
+        </div>
+    </main>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+crossorigin="anonymous"></script>
+<script src="./scripts/main.js"></script>
+<script src="./scripts/login.js"></script>
 </html>
