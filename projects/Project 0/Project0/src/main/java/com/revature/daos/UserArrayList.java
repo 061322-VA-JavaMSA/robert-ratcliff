@@ -1,5 +1,6 @@
 package com.revature.daos;
 
+import com.revature.models.Item;
 import com.revature.models.User;
 
 import java.util.ArrayList;
@@ -46,5 +47,20 @@ public class UserArrayList implements UserDAOS{
     @Override
     public User getByLogin(String username, String passwd) {
         return null;
+    }
+
+    @Override
+    public List<Item> getOwnedItems(User u) {
+        return null;
+    }
+
+    @Override
+    public void makeOffer(User u, Item i, float amount) {
+
+    }
+
+    @Override
+    public void acceptOffer(User u, Item i) {
+
     }
 }

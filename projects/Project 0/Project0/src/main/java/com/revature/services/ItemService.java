@@ -23,9 +23,9 @@ public class ItemService {
         return ids.getItem(i);
     }
 
-    public Item getItemName(String name){
+    /*public Item getItemName(String name){
         return ids.getByItemName(name);
-    }
+    }*/
 
     public List<Item> getAllItems(){
         return ids.getAllAvailableItems();
