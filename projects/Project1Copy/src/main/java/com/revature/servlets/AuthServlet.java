@@ -35,8 +35,8 @@ public class AuthServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         try {
-            //User principal = as.login(username, password);
-            User principal = us.getByUsername(username);
+            User principal = as.login(username, password);
+            //User principal = us.getByUsername(username);
 
             HttpSession session = req.getSession();
             session.setAttribute("userId", principal.getUserId());

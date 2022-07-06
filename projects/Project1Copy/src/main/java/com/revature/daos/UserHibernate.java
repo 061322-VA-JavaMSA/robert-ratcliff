@@ -2,6 +2,10 @@ package com.revature.daos;
 
 import java.util.List;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
@@ -47,8 +51,12 @@ public class UserHibernate implements UserDAOS {
 
     @Override
     public User getByUsername(String username) {
-        // TODO Auto-generated method stub
-        return null;
+        User u = new User();
+
+        try(Session s = HibernateUtil.getSessionFactory().openSession()){
+            u = s.get(User.class, username);
+        }
+        return u;
     }
 
     @Override
@@ -56,7 +64,18 @@ public class UserHibernate implements UserDAOS {
         User u = null;
 
         try(Session s = HibernateUtil.getSessionFactory().openSession()){
-            u = s.get(User.class, username);
+
+            CriteriaBuilder cb = s.getCriteriaBuilder();
+            CriteriaQuery<User> cq = cb.createQuery(User.class);
+            Root<User> root = cq.from(User.class);
+
+            Predicate predicateForUsername = cb.equal(root.get("username"), username);
+            Predicate predicateForPassword = cb.equal(root.get("password"), passwd);
+            Predicate predicateCombined = cb.and(predicateForUsername,predicateForPassword);
+
+            cq.select(root).where(predicateCombined);
+
+            u = s.createQuery(cq).getSingleResult(); //didn't add cast (User) for redenduncy, but might be good practice?
         }
 
         return u;

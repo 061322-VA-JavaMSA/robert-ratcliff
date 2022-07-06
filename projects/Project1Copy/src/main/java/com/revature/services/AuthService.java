@@ -15,7 +15,7 @@ public class AuthService {
             throw new LoginException();
         }
 
-        User u = ud.getByUsername(username);
+        User u = ud.getByLogin(username, password);
         // if no user of that name has been retrieved/if pass don't match, throw an exception
         if(u == null || !u.getPassword().equals(password)) {
             throw new LoginException();
