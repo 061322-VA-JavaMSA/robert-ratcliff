@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH::mm:ss} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+        </Console>
+        <File name = "File" filename = "logs/project1.log">
+            <PatternLayout pattern="%d{HH::mm:ss} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level = "all">
+        <AppenderRef ref="File"></AppenderRef>
+    </Root>
+    </Loggers>
+</Configuration>
