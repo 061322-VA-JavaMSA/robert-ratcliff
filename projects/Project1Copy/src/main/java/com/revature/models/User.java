@@ -7,7 +7,7 @@ import java.util.Objects;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="customer")
+@Table(name="users")
 public class User {
 
     @Id
@@ -18,30 +18,26 @@ public class User {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "isemployee")
-    private boolean isEmployee;
+    @Column(name = "user_role")
+    private Role role;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column
+    private String email;
 
 
     public User() {
         super();
     }
 
-    public void insertUser(User u) {
-        //do user stuff
+    public Role getRole() {
+        return role;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return userId == user.userId && isEmployee == user.isEmployee && username.equals(user.username) && password.equals(user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, username, password, isEmployee);
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -50,7 +46,10 @@ public class User {
                 "userId=" + userId +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", isEmployee=" + isEmployee +
+                ", role=" + role +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 
@@ -78,11 +77,16 @@ public class User {
         this.password = password;
     }
 
-    public boolean isEmployee() {
-        return isEmployee;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId == user.userId && username.equals(user.username) && password.equals(user.password) && role == user.role && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email);
     }
 
-    public void setEmployee(boolean employee) {
-        isEmployee = employee;
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, password, role, firstName, lastName, email);
     }
 }
