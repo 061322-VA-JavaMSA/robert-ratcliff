@@ -12,10 +12,8 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.LoginException;
-import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.User;
 import com.revature.services.AuthService;
-import com.revature.services.UserService;
 import com.revature.util.CorsFix;
 
 public class AuthServlet extends HttpServlet {
@@ -25,7 +23,6 @@ public class AuthServlet extends HttpServlet {
      */
     private static final long serialVersionUID = 1L;
     private AuthService as = new AuthService();
-    private UserService us = new UserService();
     private ObjectMapper om = new ObjectMapper();
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -36,7 +33,6 @@ public class AuthServlet extends HttpServlet {
 
         try {
             User principal = as.login(username, password);
-            //User principal = us.getByUsername(username);
 
             HttpSession session = req.getSession();
             session.setAttribute("userId", principal.getUserId());
@@ -49,7 +45,7 @@ public class AuthServlet extends HttpServlet {
                 res.setStatus(200);
             }
 
-        } catch ( Exception e){///*UserNotFoundException |*/LoginException e) {
+        } catch ( LoginException e) {
             res.sendError(400, "Login unsuccessful.");
             e.printStackTrace();
         }
