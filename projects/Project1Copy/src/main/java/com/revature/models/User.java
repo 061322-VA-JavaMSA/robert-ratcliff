@@ -1,10 +1,10 @@
 package com.revature.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
-import jakarta.persistence.*;
+
 
 @Entity
 @Table(name="users")
@@ -14,9 +14,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int userId;
-    @Column(name = "username", nullable = false, unique = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
-    @Column(name = "password", nullable = false)
+    @Column(name = "user_password", nullable = false)
     private String password;
     @Column(name = "user_role")
     private Role role;
