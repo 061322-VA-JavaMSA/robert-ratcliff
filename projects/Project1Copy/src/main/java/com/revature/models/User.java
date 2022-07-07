@@ -14,12 +14,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int userId;
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
     @Column(name = "user_password", nullable = false)
     private String password;
-    @Column(name = "user_role")
-    private Role role;
+    @Column(name = "user_role") //have to change in table to handle an ENUM
+    private String role;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -32,13 +32,13 @@ public class User {
         super();
     }
 
-    public Role getRole() {
+    /*public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
-    }
+    }*/
 
     @Override
     public String toString() {
