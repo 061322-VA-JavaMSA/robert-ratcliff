@@ -75,7 +75,7 @@ public class UserHibernate implements UserDAOS {
 
             cq.select(root).where(predicateCombined);
 
-            u = s.createQuery(cq).getSingleResult(); //didn't add cast (User) for redenduncy, but might be good practice?
+            u = s.createQuery(cq).getSingleResult();
         }
 
         return u;
