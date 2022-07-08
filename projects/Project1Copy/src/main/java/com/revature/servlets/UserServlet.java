@@ -26,9 +26,6 @@ import com.revature.util.CorsFix;
  */
 public class UserServlet extends HttpServlet {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private UserService us = new UserService();
     // object to convert to JSON format
@@ -47,17 +44,33 @@ public class UserServlet extends HttpServlet {
         CorsFix.addCorsHeader(req.getRequestURI(), res);
         res.addHeader("Content-Type", "application/json");
 
+        String pathInfo = req.getPathInfo();
 
-        /*List<User> users = us.getUsers();
-        List<UserDTO> usersDTO = new ArrayList<>();
+        if(pathInfo == null){
 
-        users.forEach(u -> usersDTO.add(new UserDTO(u)));*/
+            HttpSession session = req.getSession();
 
-        User user = us.getUserById(11);
-        UserDTO userDTO = new UserDTO(user);
+            if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals("ADMIN")){
+                List<User> users = us.getUsers();
+                List<UserDTO> usersDTO = new ArrayList<>();
 
-        PrintWriter pw = res.getWriter();
-        pw.write(om.writeValueAsString(userDTO));
+                users.forEach(u -> usersDTO.add(new UserDTO(u)));
+
+                PrintWriter pw = res.getWriter();
+                pw.write(om.writeValueAsString(usersDTO));
+
+                pw.close();
+            } else{
+                res.sendError(401, "Unauthorized request.");
+            }
+        }else {
+            int id = Integer.parseInt(pathInfo.substring(1));
+            User user = us.getUserById(id);
+            UserDTO userDTO = new UserDTO(user);
+
+            PrintWriter pw = res.getWriter();
+            pw.write(om.writeValueAsString(userDTO));
+        }
 
     }
 
