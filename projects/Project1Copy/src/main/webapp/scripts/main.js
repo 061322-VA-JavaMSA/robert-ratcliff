@@ -16,7 +16,7 @@ if (principalString) {
         createNavElement('Users', nav_left, './users.html', null);
     }
 
-    createNavElement('Tasks', nav_left, './tasks.html', null);
+    //createNavElement('Tasks', nav_left, './tasks.html', null);
 
     createNavElement('Logout', nav_right, null, logout);
 } else {
