@@ -36,7 +36,11 @@ public class AuthServlet extends HttpServlet {
 
             HttpSession session = req.getSession();
             session.setAttribute("userId", principal.getUserId());
-            //session.setAttribute("userRole", principal.getRole());
+            session.setAttribute("userRole", principal.getRole());
+
+            // To make Chrome work with our cookie
+            String cookie = res.getHeader("Set-Cookie") + "; SameSite=None; Secure";
+            res.setHeader("Set-Cookie", cookie);;
 
 
             UserDTO principalDTO = new UserDTO(principal);
@@ -57,5 +61,12 @@ public class AuthServlet extends HttpServlet {
         HttpSession session = req.getSession();
 
         session.invalidate();
+    }
+
+    // used to prevent CORS preflight issue
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        CorsFix.addCorsHeader(req.getRequestURI(),res);
+        super.doOptions(req, res);
     }
 }
