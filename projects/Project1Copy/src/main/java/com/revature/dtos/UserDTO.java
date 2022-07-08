@@ -12,6 +12,7 @@ public class UserDTO {
 
     private int id;
     private String username;
+    private String userRole; //will change from String to Role after adding enum
 
     public UserDTO() {
         super();
@@ -21,6 +22,7 @@ public class UserDTO {
     public UserDTO(User u) {
         id = u.getUserId();
         username = u.getUsername();
+        userRole = u.getRole();
     }
 
     public int getId() {
@@ -34,6 +36,13 @@ public class UserDTO {
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
     @Override
     public int hashCode() {
