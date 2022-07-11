@@ -20,4 +20,12 @@
         <servlet-name>auth-servlet</servlet-name>
         <url-pattern>/auth</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>reimb-servlet</servlet-name>
+        <servlet-class>com.revature.servlets.ReimburseServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reimb-servlet</servlet-name>
+        <url-pattern>/reimburse/*</url-pattern>
+    </servlet-mapping>
 </web-app>
