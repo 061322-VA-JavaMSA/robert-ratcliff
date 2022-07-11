@@ -23,9 +23,7 @@ public class UserService {
     }
     public User getByUsername(String username){return ud.getByUsername(username);}
 
-    //public List<Item> getOwnedItems(User u){return ud.getOwnedItems(u);}
-    //public void makeOffer(User u, Item i, float amount){ud.makeOffer(u,i,amount);}
-    //public void acceptOffer(User u, Item i){ud.acceptOffer(u,i);}
+
     public List<User> getUsers(){return ud.getUsers();}
 
 }

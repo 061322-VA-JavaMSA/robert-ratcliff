@@ -12,7 +12,7 @@ public class UserDTO {
 
     private int id;
     private String username;
-    private String userRole; //will change from String to Role after adding enum
+    private Role userRole; //will change from String to Role after adding enum
 
     public UserDTO() {
         super();
@@ -37,13 +37,22 @@ public class UserDTO {
     public void setUsername(String username) {
         this.username = username;
     }
-    public String getUserRole() {
+    public Role getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(String userRole) {
+    public void setUserRole(Role userRole) {
         this.userRole = userRole;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return id == userDTO.id && username.equals(userDTO.username) && userRole == userDTO.userRole;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, username);
@@ -51,6 +60,10 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO [id=" + id + ", username=" + username + "]";
+        return "UserDTO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", userRole=" + userRole +
+                '}';
     }
 }

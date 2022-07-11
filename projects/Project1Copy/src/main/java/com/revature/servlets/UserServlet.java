@@ -50,7 +50,7 @@ public class UserServlet extends HttpServlet {
 
             HttpSession session = req.getSession();
 
-            if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals("ADMIN")){
+            if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals(Role.ADMIN)){
                 List<User> users = us.getUsers();
                 List<UserDTO> usersDTO = new ArrayList<>();
 

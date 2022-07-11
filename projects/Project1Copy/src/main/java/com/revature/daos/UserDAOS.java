@@ -11,6 +11,6 @@ public interface UserDAOS {
     User getUser(User u);
     User getByUsername(String username);
     User getByLogin(String username, String passwd);
-    public List<User> getUsers();
+    List<User> getUsers();
 
 }
