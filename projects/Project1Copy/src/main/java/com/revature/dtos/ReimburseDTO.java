@@ -10,6 +10,9 @@ public class ReimburseDTO {
     private String description;
     private Date dueDate;
     private int status;
+    private int amount;
+    private String receipt;
+    private int type;
 
     public ReimburseDTO(){
         super();
@@ -20,6 +23,9 @@ public class ReimburseDTO {
         description = r.getDescription();
         dueDate = r.getSubmitted();
         status = r.getStatusId();
+        amount = r.getAmount();
+        receipt = r.getReceipt();
+        type = r.getTypeId();
     }
 
     public int getId() {
@@ -54,17 +60,41 @@ public class ReimburseDTO {
         this.status = status;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public String getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(String receipt) {
+        this.receipt = receipt;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReimburseDTO that = (ReimburseDTO) o;
-        return id == that.id && status == that.status && Objects.equals(description, that.description) && Objects.equals(dueDate, that.dueDate);
+        return id == that.id && status == that.status && amount == that.amount && type == that.type && Objects.equals(description, that.description) && dueDate.equals(that.dueDate) && Objects.equals(receipt, that.receipt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, dueDate, status);
+        return Objects.hash(id, description, dueDate, status, amount, receipt, type);
     }
 
     @Override
@@ -74,6 +104,9 @@ public class ReimburseDTO {
                 ", description='" + description + '\'' +
                 ", dueDate=" + dueDate +
                 ", status=" + status +
+                ", amount=" + amount +
+                ", receipt='" + receipt + '\'' +
+                ", type=" + type +
                 '}';
     }
 }
