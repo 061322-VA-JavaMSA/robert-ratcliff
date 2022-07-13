@@ -12,7 +12,7 @@ public class UserDTO {
 
     private int id;
     private String username;
-    private Role userRole; //will change from String to Role after adding enum
+    private Role userRole;
 
     public UserDTO() {
         super();

@@ -85,7 +85,6 @@ public class UserServlet extends HttpServlet {
 
             res.setStatus(201); // Status: Created
         } catch (Exception e){//UserNotCreatedException e) {
-//			res.setStatus(400);
             res.sendError(400, "Unable to create new user.");
             e.printStackTrace();
         }
