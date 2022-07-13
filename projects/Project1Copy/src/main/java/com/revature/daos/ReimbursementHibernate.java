@@ -8,6 +8,8 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
 
@@ -41,6 +43,23 @@ public class ReimbursementHibernate implements ReimbursementDAO{
         }
 
         return reimb;
+    }
+
+    //for some reason, it will not put the new reimbursements into the table
+
+    @Override
+    public void createReimburse(Reimbursement newReimb) {
+        //set this to -1 so it does not change a request that is already created
+        newReimb.setId(-1);
+        try(Session s = HibernateUtil.getSessionFactory().openSession()){
+            Transaction tx = s.beginTransaction();
+            int id = (int) s.save(newReimb);
+            newReimb.setId(id);
+            tx.commit();
+        }catch(ConstraintViolationException e){
+            // add log
+            e.getStackTrace();
+        }
     }
 
 

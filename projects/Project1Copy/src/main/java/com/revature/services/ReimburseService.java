@@ -15,4 +15,5 @@ public class ReimburseService {
 
     public List<Reimbursement> getReimbursements(){return ud.getReimbursements();}
     public List<Reimbursement> getByAuthorId(int auth){return ud.getByAuthorId(auth);}
+    public void createReimburse(Reimbursement newReimb){ud.createReimburse(newReimb);}
 }

@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ReimburseServlet extends HttpServlet {
@@ -58,6 +60,26 @@ public class ReimburseServlet extends HttpServlet {
             pw.write(om.writeValueAsString(reimbDTO));
 
             pw.close();
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
+        InputStream reqBody = req.getInputStream();
+        //CorsFix.addCorsHeader(req.getRequestURI(), res);
+
+        Reimbursement newReimb = om.readValue(reqBody, Reimbursement.class);
+        Date date = new Date();
+        newReimb.setSubmitted(date);
+
+        try{
+
+            rs.createReimburse(newReimb);
+
+            res.setStatus(201); //Status: Created
+        }catch(Exception e){
+            res.sendError(400, "Unable to create new reimbursement request.");
+            e.printStackTrace();
         }
     }
 }
