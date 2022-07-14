@@ -69,8 +69,9 @@ public class ReimburseServlet extends HttpServlet {
         //CorsFix.addCorsHeader(req.getRequestURI(), res);
 
         Reimbursement newReimb = om.readValue(reqBody, Reimbursement.class);
-        Date date = new Date();
-        newReimb.setSubmitted(date);
+        newReimb.setSubmitted(new Date());
+        newReimb.setResolver(1);
+        System.out.println(newReimb);
 
         try{
 
