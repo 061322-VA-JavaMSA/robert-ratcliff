@@ -7,5 +7,5 @@ import java.util.List;
 public interface ReimbursementDAO {
     List<Reimbursement> getReimbursements();
     List<Reimbursement> getByAuthorId(int auth);
-    void createReimburse(Reimbursement newReimb);
+    Reimbursement createReimburse(Reimbursement newReimb);
 }

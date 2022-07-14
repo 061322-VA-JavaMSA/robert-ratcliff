@@ -48,7 +48,7 @@ public class ReimbursementHibernate implements ReimbursementDAO{
     //for some reason, it will not put the new reimbursements into the table
 
     @Override
-    public void createReimburse(Reimbursement newReimb) {
+    public Reimbursement createReimburse(Reimbursement newReimb) {
         //set this to -1 so it does not change a request that is already created
         newReimb.setId(-1);
         try(Session s = HibernateUtil.getSessionFactory().openSession()){
@@ -60,6 +60,7 @@ public class ReimbursementHibernate implements ReimbursementDAO{
             // add log
             e.getStackTrace();
         }
+        return newReimb;
     }
 
 
