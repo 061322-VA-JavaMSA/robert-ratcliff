@@ -24,6 +24,7 @@ async function getUserReimbursements(){
         let data = await response.json();
 
         populateTable(data);
+        //<button class-"btn btn-primary" onclick="acceptReimbursement(`${reimbursement.id})">Accept</button>';
     }
 }
 
@@ -33,7 +34,6 @@ async function getReimbursements(){
     });
     if(response.status == 200){
         let data = await response.json();
-        console.log(data);
 
         populateTable(data);
     }
@@ -54,7 +54,7 @@ function populateTable(data){
 
         tdId.innerHTML = reimburse.id;
         tdDescription.innerHTML = reimburse.description;
-        tdDueDate.innerHTML = reimburse.dueDate;
+        tdDueDate.innerHTML = new Date(reimburse.dueDate).toLocaleDateString("en-US");
         tdStatus.innerHTML = reimburse.status;
         tdAmount.innerHTML = reimburse.amount;
         tdReceipt.innerHTML = reimburse.receipt;
