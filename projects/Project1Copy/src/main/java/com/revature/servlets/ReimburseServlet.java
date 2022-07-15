@@ -26,17 +26,17 @@ public class ReimburseServlet extends HttpServlet {
     private ObjectMapper om = new ObjectMapper();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException{
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         CorsFix.addCorsHeader(req.getRequestURI(), res);
         res.addHeader("Content-Type", "application/json");
 
         String pathInfo = req.getPathInfo();
 
-        if(pathInfo == null){
+        if (pathInfo == null) {
 
             HttpSession session = req.getSession();
 
-            if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals(Role.ADMIN)){
+            if (session.getAttribute("userRole") != null && session.getAttribute("userRole").equals(Role.ADMIN)) {
                 List<Reimbursement> reimb = rs.getReimbursements();
                 List<ReimburseDTO> reimbDTO = new ArrayList<>();
 
@@ -46,10 +46,10 @@ public class ReimburseServlet extends HttpServlet {
                 pw.write(om.writeValueAsString(reimbDTO));
 
                 pw.close();
-            }else{
+            } else {
                 res.sendError(401, "Unauthorized request.");
             }
-        }else {
+        } else {
             int author = Integer.parseInt(pathInfo.substring(1));
             List<Reimbursement> reimb = rs.getByAuthorId(author);
             List<ReimburseDTO> reimbDTO = new ArrayList<>();
@@ -64,7 +64,7 @@ public class ReimburseServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         InputStream reqBody = req.getInputStream();
         //CorsFix.addCorsHeader(req.getRequestURI(), res);
 
@@ -73,14 +73,56 @@ public class ReimburseServlet extends HttpServlet {
         newReimb.setResolver(1);
         System.out.println(newReimb);
 
-        try{
+        try {
 
             rs.createReimburse(newReimb);
 
             res.setStatus(201); //Status: Created
-        }catch(Exception e){
+        } catch (Exception e) {
             res.sendError(400, "Unable to create new reimbursement request.");
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        CorsFix.addCorsHeader(req.getRequestURI(), res);
+        res.addHeader("Content-Type", "application/json");
+        InputStream reqBody = req.getInputStream();
+
+        String pathInfo = req.getPathInfo();
+
+        if (pathInfo == null) {
+            res.sendError(400, "Must send an id of the reimbursement request.");
+        } else {
+
+            HttpSession session = req.getSession();
+            int id = Integer.parseInt(pathInfo.substring(1));
+            //Reimbursement newReimb = om.readValue(reqBody, Reimbursement.class);
+            String status = om.writeValueAsString(reqBody);
+            System.out.println(status);
+            Reimbursement newReimb = rs.getById(id);
+            newReimb.setResolved(new Date());
+
+            //int resolver = Integer.parseInt((String)session.getAttribute("id"));
+            //System.out.println(resolver);
+
+            //bad practice, but this user is the only admin
+            //did this as problem with getting id attribute from session attribute with casting/parsing. See Above.
+            newReimb.setResolver(1);
+
+            //set status to 3 since we are accepting.
+            newReimb.setStatusId(3);
+
+            try {
+
+                rs.acceptDeclineReimburse(newReimb);
+
+                res.setStatus(200);
+            } catch (Exception e) {
+                res.sendError(400, "Unable to create new reimbursement request.");
+                e.printStackTrace();
+            }
         }
     }
 }
