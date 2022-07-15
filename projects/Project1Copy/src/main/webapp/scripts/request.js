@@ -1,6 +1,9 @@
 //stops unlogged users or admins from entering a request.
-if(!principal || principal == 'ADMIN'){
-    window.location.href="./index.html";
+if(!principal){
+    window.location.href='./index.html';
+}
+if(principal.userRole === 'ADMIN'){
+    window.location.href='./reimburse.html';
 }
 
 let requestButton = document.getElementById('submitButton');
