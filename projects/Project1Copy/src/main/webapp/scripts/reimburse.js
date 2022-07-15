@@ -2,7 +2,7 @@ if(!principal){
     window.location.href="./index.html";
 }
 
-if(principal.userRole == 'ADMIN'){
+if(principal.userRole === 'ADMIN'){
     getReimbursements();
 }
 
@@ -51,6 +51,7 @@ function populateTable(data){
         let tdAmount = document.createElement('td');
         let tdReceipt = document.createElement('td');
         let tdType = document.createElement('td');
+        let tdAuthor = document.createElement('td');
 
         tdId.innerHTML = reimburse.id;
         tdDescription.innerHTML = reimburse.description;
@@ -59,6 +60,7 @@ function populateTable(data){
         tdAmount.innerHTML = reimburse.amount;
         tdReceipt.innerHTML = reimburse.receipt;
         tdType.innerHTML = reimburse.type;
+        tdAuthor.innerHTML = reimburse.author;
 
 
         tr.append(tdId);
@@ -68,11 +70,70 @@ function populateTable(data){
         tr.append(tdAmount);
         tr.append(tdReceipt);
         tr.append(tdType);
+        tr.append(tdAuthor);
+
+        if(principal.userRole === 'ADMIN'){
+           /*let tdAccept = document.createElement('button');
+            tdAccept.innerText = 'Accept';
+            tdAccept.type = "acceptButton";
+            tdAccept.name = "acceptButton";
+            tdAccept.classList.add('acceptButton')
+            tr.append(tdAccept);
+            tdAccept.addEventListener('click', accept());*/
+            let tdAccept = document.createElement('td');
+            tdAccept.innerHTML = `<button class="btn btn-primary" onclick="acceptReimbursement(${reimburse.id})">Accept</button>`; //acceptReimbursement(${reimburse.id})
+            tr.append(tdAccept);
+            let tdDeny = document.createElement('td');
+            tdDeny.innerHTML = `<button class="btn btn-primary" onclick="denyReimbursement(${reimburse.id})">Deny</button>`; //acceptReimbursement(${reimburse.id})
+            tr.append(tdDeny);
+        }
 
         tableBody.append(tr);
     });
 }
 
+function acceptReimbursement(id){
+    let confirmA = confirm("Are Are you sure you want to accept this request? sure?");
+    if(confirmA){
+        fetch(`${apiUrl}/reimburse/${id}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers:{
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+        }) .then(response => {
+            if(response.status == 200){
+                alert('Request has been accepted');
+            }else{
+                alert("Unable to accept");
+            }
+        })
+    }
+}
+
+function denyReimbursement(id){
+    let confirmA = confirm("Are you sure you want to deny this request?");
+    if(confirmA){
+        fetch(`${apiUrl}/deny/${id}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers:{
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+        }) .then(response => {
+            if(response.status == 200){
+                alert('Request has been denied');
+            }else{
+                alert("Unable to deny");
+            }
+        })
+    }
+}
+
 async function request(){
-    window.location.href="request.html";
+    if(!principal || principal.userRole === 'ADMIN'){
+
+    }else{
+        window.location.href="request.html";
+    }
 }
