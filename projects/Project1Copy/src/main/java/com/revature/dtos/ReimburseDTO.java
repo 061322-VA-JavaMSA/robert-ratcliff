@@ -14,6 +14,7 @@ public class ReimburseDTO {
     private String receipt;
     private int type;
     private int author;
+    private int resolver;
 
     public ReimburseDTO(){
         super();
@@ -28,6 +29,7 @@ public class ReimburseDTO {
         receipt = r.getReceipt();
         type = r.getTypeId();
         author = r.getAuthor();
+        resolver = r.getResolver();
     }
 
     public int getId() {
@@ -94,6 +96,14 @@ public class ReimburseDTO {
         this.author = author;
     }
 
+    public int getResolver() {
+        return resolver;
+    }
+
+    public void setResolver(int resolver) {
+        this.resolver = resolver;
+    }
+
     @Override
     public String toString() {
         return "ReimburseDTO{" +
@@ -105,6 +115,7 @@ public class ReimburseDTO {
                 ", receipt='" + receipt + '\'' +
                 ", type=" + type +
                 ", author=" + author +
+                ", resolver=" + resolver +
                 '}';
     }
 
@@ -113,11 +124,12 @@ public class ReimburseDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReimburseDTO that = (ReimburseDTO) o;
-        return id == that.id && status == that.status && amount == that.amount && type == that.type && author == that.author && Objects.equals(description, that.description) && dueDate.equals(that.dueDate) && Objects.equals(receipt, that.receipt);
+        return id == that.id && status == that.status && amount == that.amount && type == that.type && author == that.author && resolver == that.resolver && Objects.equals(description, that.description) && dueDate.equals(that.dueDate) && Objects.equals(receipt, that.receipt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, dueDate, status, amount, receipt, type, author);
+        return Objects.hash(id, description, dueDate, status, amount, receipt, type, author, resolver);
     }
+
 }

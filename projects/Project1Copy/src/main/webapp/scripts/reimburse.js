@@ -73,13 +73,9 @@ function populateTable(data){
         tr.append(tdAuthor);
 
         if(principal.userRole === 'ADMIN'){
-           /*let tdAccept = document.createElement('button');
-            tdAccept.innerText = 'Accept';
-            tdAccept.type = "acceptButton";
-            tdAccept.name = "acceptButton";
-            tdAccept.classList.add('acceptButton')
-            tr.append(tdAccept);
-            tdAccept.addEventListener('click', accept());*/
+            let tdResolver = document.createElement('td');
+            tdResolver.innerHTML = reimburse.resolver;
+            tr.append(tdResolver);
             let tdAccept = document.createElement('td');
             tdAccept.innerHTML = `<button class="btn btn-primary" onclick="acceptReimbursement(${reimburse.id})">Accept</button>`; //acceptReimbursement(${reimburse.id})
             tr.append(tdAccept);
