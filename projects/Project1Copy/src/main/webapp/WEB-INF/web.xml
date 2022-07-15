@@ -28,4 +28,12 @@
         <servlet-name>reimb-servlet</servlet-name>
         <url-pattern>/reimburse/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>deny-servlet</servlet-name>
+        <servlet-class>com.revature.servlets.DenyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deny-servlet</servlet-name>
+        <url-pattern>/deny/*</url-pattern>
+    </servlet-mapping>
 </web-app>
