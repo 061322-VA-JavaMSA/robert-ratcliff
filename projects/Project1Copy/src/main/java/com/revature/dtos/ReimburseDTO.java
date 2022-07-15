@@ -13,6 +13,7 @@ public class ReimburseDTO {
     private int amount;
     private String receipt;
     private int type;
+    private int author;
 
     public ReimburseDTO(){
         super();
@@ -26,6 +27,7 @@ public class ReimburseDTO {
         amount = r.getAmount();
         receipt = r.getReceipt();
         type = r.getTypeId();
+        author = r.getAuthor();
     }
 
     public int getId() {
@@ -84,17 +86,12 @@ public class ReimburseDTO {
         this.type = type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ReimburseDTO that = (ReimburseDTO) o;
-        return id == that.id && status == that.status && amount == that.amount && type == that.type && Objects.equals(description, that.description) && dueDate.equals(that.dueDate) && Objects.equals(receipt, that.receipt);
+    public int getAuthor() {
+        return author;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, description, dueDate, status, amount, receipt, type);
+    public void setAuthor(int author) {
+        this.author = author;
     }
 
     @Override
@@ -107,6 +104,20 @@ public class ReimburseDTO {
                 ", amount=" + amount +
                 ", receipt='" + receipt + '\'' +
                 ", type=" + type +
+                ", author=" + author +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReimburseDTO that = (ReimburseDTO) o;
+        return id == that.id && status == that.status && amount == that.amount && type == that.type && author == that.author && Objects.equals(description, that.description) && dueDate.equals(that.dueDate) && Objects.equals(receipt, that.receipt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, dueDate, status, amount, receipt, type, author);
     }
 }
