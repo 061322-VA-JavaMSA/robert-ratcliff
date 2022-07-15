@@ -44,6 +44,23 @@ public class ReimbursementHibernate implements ReimbursementDAO{
 
         return reimb;
     }
+    @Override
+    public Reimbursement getById(int id){
+        Reimbursement r = null;
+
+        try(Session s = HibernateUtil.getSessionFactory().openSession()){
+            CriteriaBuilder cb = s.getCriteriaBuilder();
+            CriteriaQuery<Reimbursement> cq = cb.createQuery(Reimbursement.class);
+            Root<Reimbursement> root = cq.from(Reimbursement.class);
+
+            Predicate predicateForAuthor= cb.equal(root.get("id"), id);
+
+            cq.select(root).where(predicateForAuthor);
+
+            r = s.createQuery(cq).getSingleResult();
+        }
+        return r;
+    }
 
     //for some reason, it will not put the new reimbursements into the table
 
@@ -63,5 +80,17 @@ public class ReimbursementHibernate implements ReimbursementDAO{
         return newReimb;
     }
 
+    @Override
+    public void acceptDeclineReimburse(Reimbursement r) {
+        try(Session s = HibernateUtil.getSessionFactory().openSession()){
+            Transaction tx = s.beginTransaction();
+            s.update(r);
+            tx.commit();
+        }catch(ConstraintViolationException e){
+            // add log
+            e.getStackTrace();
+        }
+
+    }
 
 }
